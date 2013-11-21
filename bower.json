@@ -1,0 +1,16 @@
+{
+  "name": "test",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "underscore": "~1.5.2",
+    "backbone": "~1.1.0",
+    "requirejs": "~2.1.9",
+    "requirejs-text": "~2.0.10",
+    "modernizr": "~2.7.0",
+    "mediator-js": "~0.9.6",
+    "handlebars": "~1.1.2",
+    "layoutmanager": "~0.9.4"
+  },
+  "devDependencies": {}
+}

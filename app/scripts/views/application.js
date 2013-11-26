@@ -3,12 +3,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'views/base',
     'templates'
-], function ($, _, Backbone, JST) {
-    'use strict';
+], function ($, _, Backbone, BaseView, JST) {
 
-    var ApplicationView = Backbone.View.extend({
-        template: JST['app/scripts/views/templates/application.hbs']
+    var ApplicationView = BaseView.extend({
+        template: 'application.hbs',
     });
 
     return ApplicationView;

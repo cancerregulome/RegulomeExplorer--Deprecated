@@ -10,7 +10,7 @@
     "modernizr": "~2.7.0",
     "mediator-js": "~0.9.6",
     "handlebars": "~1.1.2",
-    "layoutmanager": "~0.9.4"
+    "layoutmanager": "45620c6819fdc69daf02dc0368545980373784c2"
   },
   "devDependencies": {}
 }

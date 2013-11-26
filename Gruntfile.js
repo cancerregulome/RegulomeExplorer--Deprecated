@@ -111,7 +111,7 @@ module.exports = function (grunt) {
             },
             server: '.tmp'
         },
-         requirejs: {
+        requirejs: {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
                 options: {
@@ -123,7 +123,7 @@ module.exports = function (grunt) {
                     },
                     // TODO: Figure out how to make sourcemaps work with grunt-usemin
                     // https://github.com/yeoman/grunt-usemin/issues/30
-                    //generateSourceMaps: true,
+                    // generateSourceMaps: true,
                     // required to support SourceMaps
                     // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
@@ -208,9 +208,16 @@ module.exports = function (grunt) {
         },
         useminPrepare: {
             options: {
-                dest: '<%= yeoman.dist %>'
+                dest: '<%= yeoman.dist %>',
+                flow: {
+                    pack: {
+                        steps: { 'js': ['concat'], 'css': ['concat', 'cssmin']},
+                        post: {}
+                    }
+                }
             },
-            html: '<%= yeoman.app %>/index.html'
+            html: '<%= yeoman.app %>/index.html',
+            pack: '<%= yeoman.app %>/index.html'
         },
         usemin: {
             options: {
@@ -288,6 +295,17 @@ module.exports = function (grunt) {
                 cwd: '<%= yeoman.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
+            },
+            pack: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.dist %>',
+                    src: [
+                        'bower_components/requirejs/require.js'
+                    ]
+                }]
             }
         },
         modernizr: {
@@ -322,6 +340,7 @@ module.exports = function (grunt) {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
     });
 
+
     grunt.registerTask('serve', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -350,11 +369,29 @@ module.exports = function (grunt) {
         'mocha'
     ]);
 
+    grunt.registerTask('pack', [
+        'clean:dist',
+        'createDefaultTemplate',
+        'handlebars',
+        'useminPrepare:pack',
+        'requirejs',
+        'concurrent:dist',
+        'autoprefixer',
+        'concat',
+        'cssmin',
+        'modernizr',
+        'copy:dist',
+        'copy:pack',
+        'rev',
+        'usemin'
+    ]);
+
+
     grunt.registerTask('build', [
         'clean:dist',
         'createDefaultTemplate',
         'handlebars',
-        'useminPrepare',
+        'useminPrepare:html',
         'requirejs',
         'concurrent:dist',
         'autoprefixer',

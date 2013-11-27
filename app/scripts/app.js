@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'routes',
+    'views/application',
     'mediator-js'
-], function ($, _, Backbone, Routes, Mediator) {
+], function ($, _, Backbone, Routes, AppView, Mediator) {
     'use strict';
 
 function loadApplicationView(){

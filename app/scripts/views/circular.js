@@ -7,7 +7,7 @@ define([
     'vq',
     'helpers/circvis_helper',
     'circvis'
-], function ($, _, Backbone, AppView, vq, circvisConfigFactory) {
+], function ($, _, Backbone, AppView, vq, CircvisConfigFactory) {
 
     var CircularView = AppView.extend({
     	//the template file is defined relative to the path /app/scripts/templates
@@ -17,7 +17,7 @@ define([
         //afterRender is executed immediately after the view's document fragment is injected into the DOM.
         //This is the first opportunity to select, modify, or attach handlers to the view's DOM fragment
         afterRender: function() {
-            circvisConfigFactory.data.rings([{}]);
+            CircvisConfigFactory.data().rings([{}]);
         }
     });
 

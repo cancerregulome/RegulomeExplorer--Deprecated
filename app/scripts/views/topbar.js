@@ -2,6 +2,7 @@ define   ([
     'jquery',
     'underscore',
     'views/base'
+    'json!configurations/display',
 
     'hbs!templates/sign_in_modal',
     'hbs!templates/hangout_link',
@@ -11,18 +12,21 @@ define   ([
     'views/cloud_storage_view'
 ],
 
-function ( $, 
-            _,
-           BaseView
-           SignInModal,
-           HangoutLink,
-           AboutLink,
-           SignInView,
-           CloudStorageView
-    ) {
+function ( 
+    $,
+    _,
+    BaseView,
+    Display,
+    SignInModal,
+    HangoutLink,
+    AboutLink,
+    SignInView,
+    CloudStorageView
+) {
 
 return BaseView.extend({
     template 'topbar',
+
     events:{
         "click .signin": function() {
             this.$signInModal.modal("toggle");
@@ -30,9 +34,14 @@ return BaseView.extend({
         }
     },
 
-    initialize:function (options) {
+    initialize: function (options) {
         _.extend(this, options);
         _.bindAll(this, "initHangoutLink", "initAboutLinks");
+      
+    },
+
+    beforeRender: function () {
+        this.setView('.modal-body', new SignInView())
     },
 
     afterRender: function() {
@@ -43,18 +52,18 @@ return BaseView.extend({
         _.defer(this.initHangoutLink);
         _.defer(this.initAboutLinks);
 
-        this.$el.find(".titled").html(this.Display.get("title") || "AppTemplate");
+        this.$el.find(".titled").html(Display["title"] || "AppTemplate");
     },
 
     initHangoutLink: function() {
-        var hangoutUrl = this.Display.get("hangoutUrl");
+        var hangoutUrl = Display["hangoutUrl"];
         if (hangoutUrl) {
             this.$el.find(".hangout-container").html(HangoutLink({ "url": hangoutUrl }));
         }
     },
 
     initAboutLinks: function() {
-        var aboutLinks = this.Display.get("aboutLinks") || [];
+        var aboutLinks = Display["aboutLinks"] || [];
         if (!_.isEmpty(aboutLinks)) {
             var UL = this.$el.find(".about-links");
             UL.empty();

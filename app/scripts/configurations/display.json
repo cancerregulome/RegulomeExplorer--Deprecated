@@ -1,0 +1,58 @@
+{
+    "title":"TCGA Cancer Regulome :: Example",
+    "hangoutUrl":"https://plus.google.com/hangouts/_?gid={app-gid}",
+    "aboutLinks":[
+        {
+            "label":"TCGA Home",
+            "url":"http://cancergenome.nih.gov"
+        },
+        {
+            "label":"Cancer Regulome Home",
+            "url":"http://www.cancerregulome.org"
+        },
+        {
+            "divider":true,
+            "header":"About Us"
+        },
+        {
+            "label":"Institute for Systems Biology",
+            "url":"http://www.systemsbiology.org"
+        },
+        {
+            "label":"Shmulevich Lab",
+            "url":"http://www.systemsbiology.org/shmulevich-group"
+        },
+        {
+            "label":"Contact Us",
+            "url":"mailto:info@csacr.org?subject=Questions"
+        },
+        {
+            "divider":true,
+            "header":"Other Applications"
+        },
+        {
+            "label":"Regulome Explorer",
+            "url":"http://explorer.cancerregulome.org"
+        },
+        {
+            "label":"Pubcrawl",
+            "url":"http://pubcrawl.systemsbiology.net"
+        },
+        {
+            "label":"GeneSpot",
+            "url":"http://genespot.org"
+        },
+        {
+            "divider":true,
+            "header":"Open Source Projects"
+        },
+        {
+            "label":"Google Code",
+            "url":"http://cancerregulome.googlecode.com"
+        },
+        {
+            "label":"Github",
+            "url":"http://github.com/cancerregulome"
+        }
+    ]
+}

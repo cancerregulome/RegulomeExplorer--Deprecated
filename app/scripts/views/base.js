@@ -3,8 +3,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'templates',
     'layoutmanager'
-], function ($, _, Backbone) {
+], function ($, _, Backbone, JST) {
 
     var BaseView = Backbone.Layout.extend({
     	manage: true,

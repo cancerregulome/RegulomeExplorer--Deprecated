@@ -1,0 +1,7 @@
+{
+	"config1" : {
+		"property1" : "value1",
+		"property2" : 2,
+		"property3" : 3.33
+	}
+}

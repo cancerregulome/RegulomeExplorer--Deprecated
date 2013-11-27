@@ -3,11 +3,13 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'views/base',
-    'json!configurations/example.json'
-], function ($, _, Backbone, BaseView, configObject) {
+    'views/application',
+    'vq',
+    'helpers/circvis_helper',
+    'circvis'
+], function ($, _, Backbone, AppView, vq, circvisConfigFactory) {
 
-    var ApplicationView = BaseView.extend({
+    var CircularView = AppView.extend({
     	//the template file is defined relative to the path /app/scripts/templates
     	// see main.js to modify this configuration
         template: 'application.hbs',
@@ -15,9 +17,9 @@ define([
         //afterRender is executed immediately after the view's document fragment is injected into the DOM.
         //This is the first opportunity to select, modify, or attach handlers to the view's DOM fragment
         afterRender: function() {
-        	console.log(configObject);
+            circvisConfigFactory.data.rings([{}]);
         }
     });
 
-    return ApplicationView;
+    return CircularView;
 });

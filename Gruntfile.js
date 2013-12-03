@@ -54,14 +54,14 @@ module.exports = function(grunt) {
             },
             proxies: [
                 // {
-                //     context : "/mongo",  //identify request to proxy via URL
-                //     host : "server",  //config this or proxy won't work
-                //     port : 9000, //config this or proxy won't work
-                //     https : false,
-                //     changeOrigin : false,
-                //     rewrite: {
-                //         '^/mongo' : ''  //remove /mongo from proxied request
-                //     }
+                    // context : '/mongo',  //identify request to proxy via URL
+                    // host : 'localhost',  //config this or proxy won't work
+                    // port : 9000, //config this or proxy won't work
+                    // https : false,
+                    // changeOrigin : false,
+                    // rewrite: {
+                    //     '^/mongo' : ''  //remove /mongo from proxied request
+                    // }
                 // }
             ],
             livereload: {
@@ -367,6 +367,7 @@ module.exports = function(grunt) {
         grunt.task.run([
             'clean:server',
             'concurrent:server',
+	    'configureProxies',
             'autoprefixer',
             'connect:livereload',
             'watch'

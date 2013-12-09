@@ -2,16 +2,16 @@
 'use strict';
 var SERVER_PORT = 9000;
 var yeomanConfig = {
-            app: 'app',
-            dist: 'dist'
-        };
+    app: 'app',
+    dist: 'dist'
+};
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
     // load all grunt tasks
@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 files: [
                     '<%= yeoman.app %>/scripts/views/templates/{,*/}*.hbs'
                 ],
-            tasks: ['handlebars']
+                tasks: ['handlebars']
             },
         },
         connect: {
@@ -54,14 +54,14 @@ module.exports = function (grunt) {
             },
             proxies: [
                 // {
-                //     context : "/mongo",  //identify request to proxy via URL
-                //     host : "server",  //config this or proxy won't work
-                //     port : 9000, //config this or proxy won't work
-                //     https : false,
-                //     changeOrigin : false,
-                //     rewrite: {
-                //         '^/mongo' : ''  //remove /mongo from proxied request
-                //     }
+                    // context : '/mongo',  //identify request to proxy via URL
+                    // host : 'localhost',  //config this or proxy won't work
+                    // port : 9000, //config this or proxy won't work
+                    // https : false,
+                    // changeOrigin : false,
+                    // rewrite: {
+                    //     '^/mongo' : ''  //remove /mongo from proxied request
+                    // }
                 // }
             ],
             livereload: {
@@ -71,15 +71,27 @@ module.exports = function (grunt) {
                         '.tmp',
                         '<%= yeoman.app %>'
                     ],
-                    middleware: function (connect) {
-                          return [
-                            proxySnippet,
-                            connect.static(require('path').resolve(yeomanConfig.app)),
-                            connect.static(require('path').resolve('.tmp'))
-                          ];
+                    middleware: function(connect, options) {
+                        // Same as in grunt-contrib-connect
+                        var middlewares = [];
+                        var directory = options.directory ||
+                            options.base[options.base.length - 1];
+                        if (!Array.isArray(options.base)) {
+                            options.base = [options.base];
+                        }
+
+                        // Add Proxy middleware
+                        middlewares.push(proxySnippet);
+
+                        // Same as in grunt-contrib-connect
+                        options.base.forEach(function(base) {
+                            middlewares.push(connect.static(base));
+                        });
+
+                        middlewares.push(connect.directory(directory));
+                        return middlewares;
                     }
                 }
-                
             },
             test: {
                 options: {
@@ -131,7 +143,7 @@ module.exports = function (grunt) {
                     wrap: true,
                     // prevent build from packing plugins.  
                     // Built application cannot dynamically load files.
-                    stubModules : ['json', 'text']
+                    stubModules: ['json', 'text']
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
                 }
             }
@@ -214,7 +226,10 @@ module.exports = function (grunt) {
                 dest: '<%= yeoman.dist %>',
                 flow: {
                     pack: {
-                        steps: { 'js': ['concat'], 'css': ['concat', 'cssmin']},
+                        steps: {
+                            'js': ['concat'],
+                            'css': ['concat', 'cssmin']
+                        },
                         post: {}
                     }
                 }
@@ -339,12 +354,12 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('createDefaultTemplate', function () {
+    grunt.registerTask('createDefaultTemplate', function() {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
     });
 
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('serve', function(target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -352,15 +367,16 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'concurrent:server',
+	    'configureProxies',
             'autoprefixer',
             'connect:livereload',
             'watch'
         ]);
     });
 
-    grunt.registerTask('server', function () {
-      grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-      grunt.task.run(['serve']);
+    grunt.registerTask('server', function() {
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
+        grunt.task.run(['serve']);
     });
 
     grunt.registerTask('test', [

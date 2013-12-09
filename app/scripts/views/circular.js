@@ -11,7 +11,7 @@ define([
 
     var CircularView = AppView.extend({
     	//the template file is defined relative to the path /app/scripts/templates
-    	// see main.js to modify this configuration
+        // see main.js to modify this configuration
         template: 'application.hbs',
         
         //afterRender is executed immediately after the view's document fragment is injected into the DOM.

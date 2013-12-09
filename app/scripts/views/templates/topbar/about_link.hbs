@@ -1,0 +1,10 @@
+{{#each links}}
+{{#if divider}}
+	<li class='divider'></li>
+	{{#if header}}
+		<li class='nav-header'>{{header}}</li>
+	{{/if}}
+{{else}}
+	<li><a href="{{url}}" target="_blank">{{label}}</a></li>
+{{/if}}
+{{/each}}

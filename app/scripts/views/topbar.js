@@ -9,7 +9,7 @@ define   ([
     'views/topbar/cloud_storage'
 ],
 
-function ( 
+function (
     $,
     _,
     BaseView,
@@ -39,12 +39,6 @@ return BaseView.extend({
 
     afterRender: function() {
         this.initSignIn();
-        // _.defer(function() {
-        //     new CloudStorageView();
-        // });
-        // _.defer(this.initHangoutLink);
-        // _.defer(this.initAboutLinks);
-
         this.$el.find(".titled").html(Display["title"] || "AppTemplate");
     },
 
@@ -75,7 +69,8 @@ return BaseView.extend({
     },
 
     initSignIn:function () {
-        this.$signInModal = new SignInModal({el : 'body'});
+        signInModal = new SignInModal();
+        this.$signInModal = $('body').append(signInModal.render());
 
     //     var _this = this;
     //     var addAuthProviders = function(json) {

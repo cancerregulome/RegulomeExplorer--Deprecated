@@ -6,12 +6,20 @@ require.config({
         underscore: {
             exports: '_'
         },
+         'jQuery-ui' : {
+            'deps': ['jquery'],
+            'exports' : '$'
+        },
         backbone: {
             deps: [
                 'underscore',
                 'jquery'
             ],
             exports: 'Backbone'
+        },
+        bootstrap : {
+            deps : ['jquery','jQuery-ui'],
+            exports : 'bootstrap'
         },
         handlebars: {
             exports: 'Handlebars',
@@ -38,6 +46,8 @@ require.config({
         //base libraries
         underscore: '../bower_components/underscore/underscore',
         jquery: '../bower_components/jquery/jquery',
+        'jQuery-ui': '../bower_components/jquery-ui/ui/jquery-ui',
+        bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
         //backbone
         backbone: '../bower_components/backbone/backbone',
         layoutmanager : '../bower_components/layoutmanager/backbone.layoutmanager',
@@ -57,8 +67,8 @@ require.config({
 });
 
 require([
-    'jquery', 'underscore', 'backbone', 'app', 'layoutmanager'
-], function ($, _ , Backbone, RE, layoutmanager ) {
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'app', 'layoutmanager'
+], function ($, _ , Backbone, Bootrap, RE, layoutmanager ) {
 
     //Configure LayoutManager
     Backbone.Layout.configure({

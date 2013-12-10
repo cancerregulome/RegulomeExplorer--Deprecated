@@ -24,9 +24,14 @@ return BaseView.extend({
     template: 'topbar/topbar.hbs',
     className: 'container',
 
+    events: {
+            'click .signin' : 'toggleModal'
+    },
+
+
     initialize: function (options) {
         _.extend(this, options);
-        _.bindAll(this, "initHangoutLink", "initAboutLinks");
+        _.bindAll(this, "initHangoutLink", "initAboutLinks", "toggleModal");
       
     },
 
@@ -35,11 +40,17 @@ return BaseView.extend({
         csview.render();
         this.initHangoutLink();
         this.initAboutLinks();
+        this.initSignIn();
     },
 
     afterRender: function() {
-        this.initSignIn();
+        this.$signInModal = $('.signin-container');
         this.$el.find(".titled").html(Display["title"] || "AppTemplate");
+    },
+
+    toggleModal: function() {
+        this.$signInModal.modal('toggle');
+        return false;
     },
 
     initHangoutLink: function() {
@@ -69,9 +80,8 @@ return BaseView.extend({
     },
 
     initSignIn:function () {
-        signInModal = new SignInModal();
-        this.$signInModal = $('body').append(signInModal.render());
-
+        var signInModal = new SignInModal({el : '#modal-holder'});
+        signInModal.render();
     //     var _this = this;
     //     var addAuthProviders = function(json) {
     //         _.each(json.providers, function (provider) {

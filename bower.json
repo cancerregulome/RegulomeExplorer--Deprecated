@@ -13,7 +13,9 @@
     "layoutmanager": "45620c6819fdc69daf02dc0368545980373784c2",
     "requirejs-plugins": "~1.0.2",
     "d3": "~3.3.10",
-    "visquick": "~0.1.0"
+    "visquick": "~0.1.0",
+    "bootstrap": "~3.0.3",
+    "jquery-ui": "~1.10.3"
   },
   "devDependencies": {}
 }

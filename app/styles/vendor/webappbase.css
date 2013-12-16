@@ -7,6 +7,11 @@
 	height: 25px;
 	width: 25px;
 }
+
+.navbar {
+    background: #DDD;
+}
+
 .navbar .brand {
 	padding: 3px 20px 2px;
 }

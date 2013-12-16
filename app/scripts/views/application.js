@@ -4,7 +4,7 @@ define([
     'underscore',
     'backbone',
     'views/base',
-    'views/topbar',
+    'views/topbar/topbar',
     'json!configurations/example.json'
 ], function ($, _, Backbone, BaseView, TopbarView, configObject) {
 

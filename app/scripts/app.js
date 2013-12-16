@@ -19,10 +19,11 @@ function loadApplicationView(){
 }
 
 var RE = function() {
+    loadApplicationView();
     this.mediator = new Mediator();
     this.routes = new Routes();
-    Backbone.history.start();
-    loadApplicationView();
+    Backbone.history.start({pushState: true});
+    
 };
 
 return RE;

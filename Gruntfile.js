@@ -311,7 +311,7 @@ module.exports = function(grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'images/{,*/}*.{webp,gif,png,jpg,bmp}',
-                        'styles/fonts/{,*/}*.*'
+                        'fonts/{,*/}*.*'
                     ]
                 }]
             },
@@ -375,7 +375,7 @@ module.exports = function(grunt) {
         grunt.task.run([
             'clean:server',
             'concurrent:server',
-	    'configureProxies',
+	        'configureProxies',
             'autoprefixer',
             'connect:livereload',
             'watch'
@@ -406,7 +406,7 @@ module.exports = function(grunt) {
         'autoprefixer',
         'concat',
         'cssmin',
-        'modernizr',
+        // 'modernizr',
         'copy:dist',
         'copy:pack',
         'rev',
@@ -425,7 +425,7 @@ module.exports = function(grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'modernizr',
+        // 'modernizr',
         'copy:dist',
         'rev',
         'usemin'

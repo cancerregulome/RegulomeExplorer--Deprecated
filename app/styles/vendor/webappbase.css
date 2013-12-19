@@ -1,19 +1,60 @@
-/*body {
+body {
     position: relative;
-	padding-top: 50px;
+	padding-top: 43px;
 }
-*/
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
 .imgbrand {
-	height: 25px;
-	width: 25px;
+	height: 35px;
+	width: 35px;
 }
 
 .navbar {
     background: #DDD;
+    
+    min-height: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #fafafa;
+  background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
+  border-bottom: 1px solid #d4d4d4;
 }
 
-.navbar .brand {
+form.navbar-form {
+    margin: 0;
+    padding: 2px 0 0 0;
+}
+
+.container.header {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.navbar-brand {
 	padding: 3px 20px 2px;
+    margin-left: -20px;
+}
+
+.navbar-nav > li > a {
+padding : 10px 15px 10px 2px;
+}
+
+.navbar-search {
+    min-width:200px;
 }
 
 .graph-container, .filter-container{

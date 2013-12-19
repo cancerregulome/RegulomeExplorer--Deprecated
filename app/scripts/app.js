@@ -24,7 +24,7 @@ var RE = function() {
     
     this.start = function() {
         loadApplicationView();
-        Backbone.history.start({pushState: true});
+        Backbone.history.start({pushState: false});
     };
 
 };

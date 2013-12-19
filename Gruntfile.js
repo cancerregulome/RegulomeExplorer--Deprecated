@@ -6,10 +6,6 @@ var yeomanConfig = {
     dist: 'dist'
 };
 
-
-// add require for connect-modewrite.  works with Backbone Router pushState
-var modRewrite = require('connect-modrewrite');
-
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -87,9 +83,6 @@ module.exports = function(grunt) {
 
                         // Add Proxy middleware
                         middlewares.push(proxySnippet);
-
-                        //add listener for Backbone.Router pushState route
-                        middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]'])); //Matches everything that does not contain a '.' (period)
 
                         // Same as in grunt-contrib-connect
                         options.base.forEach(function(base) {

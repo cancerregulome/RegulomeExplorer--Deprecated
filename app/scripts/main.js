@@ -68,7 +68,7 @@ require.config({
 
 require([
     'jquery', 'underscore', 'backbone', 'bootstrap', 'app', 'layoutmanager'
-], function ($, _ , Backbone, Bootrap, RE, layoutmanager ) {
+], function ($, _ , Backbone, Bootrap, App, layoutmanager ) {
 
     //Configure LayoutManager
     Backbone.Layout.configure({
@@ -78,9 +78,12 @@ require([
         manage: true
     });
 
-    window.RE = new RE();
+    window.app = "RE";
+    window[window.app] = new App();
     //inject Backbone, jQuery, Underscore as global objects.
     window.Backbone = Backbone;
     window.$ = window.jQuery = $;
     window._ = _;
+
+    window[window.app].start();
 });

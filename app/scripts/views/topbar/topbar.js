@@ -25,13 +25,17 @@ return BaseView.extend({
     className: 'container',
 
     events: {
-            'click .signin' : 'toggleModal'
+            'click .signin' : 'toggleModal',
+            'click #topbar-search-button' : 'publishSearch'
     },
 
+    subscriptions: {
+            'search:term:selected' : 'toggleModal'
+    },
 
     initialize: function (options) {
         _.extend(this, options);
-        _.bindAll(this, "initHangoutLink", "initAboutLinks", "toggleModal");
+        _.bindAll(this, "initHangoutLink", "initAboutLinks", "toggleModal", "publishSearch");
       
     },
 
@@ -50,6 +54,12 @@ return BaseView.extend({
 
     toggleModal: function() {
         this.$signInModal.modal('toggle');
+        return false;
+    },
+
+    publishSearch: function() {
+        var term = this.$el.find('#querySearchTerm').val();
+        if ( term !== "" ) this.mediator.publish( "search:term:selected", term);
         return false;
     },
 

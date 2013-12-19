@@ -1,11 +1,12 @@
 /*global define*/
 
 define([
+    'underscore',
     'jquery',
     'backbone',
     'views/application',
     'views/circular'
-], function ($, Backbone, AppView, CircularView) {
+], function (_, $, Backbone, AppView, CircularView) {
     'use strict';
 
     var Router = Backbone.Router.extend({

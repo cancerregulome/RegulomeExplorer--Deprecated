@@ -15,7 +15,8 @@
     "d3": "~3.3.10",
     "visquick": "~0.1.0",
     "bootstrap": "~3.0.3",
-    "jquery-ui": "~1.10.3"
+    "jquery-ui": "~1.10.3",
+    "slickgrid": "~2.1.0"
   },
   "devDependencies": {}
 }

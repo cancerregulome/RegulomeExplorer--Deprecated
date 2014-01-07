@@ -41,6 +41,10 @@ require.config({
             deps : ['vq'],
             exports : 'vq'
         },
+        slickgrid: {
+            deps: ['jquery', 'jquery-ui'],
+            exports : 'slickgrid'
+        }
     },
     paths: {
         //base libraries
@@ -57,6 +61,9 @@ require.config({
         d3 : '../bower_components/d3/d3',
         vq : '../bower_components/visquick/vq',
         circvis : '../bower_components/visquick/vq.circvis',
+
+        //datagrid
+        slickgrid: '../bower_components/slickgrid/slick.grid.js',
 
         handlebars: '../bower_components/handlebars/handlebars',
 

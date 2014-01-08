@@ -42,8 +42,19 @@ require.config({
             exports : 'vq'
         },
         slickgrid: {
-            deps: ['jquery', 'jquery-ui'],
-            exports : 'slickgrid'
+            deps: [
+            '../bower_components/slickgrid/slick.core',
+            'jquery', 
+            'jQuery-ui',
+            '../bower_components/slickgrid/lib/jquery.event.drag-2.2'
+            ],
+            exports : 'Slick'
+        },
+        slickgrid_rowselectionmodel: {
+            deps: [
+            'slickgrid'
+            ],
+            exports : 'Slick'
         }
     },
     paths: {
@@ -63,7 +74,8 @@ require.config({
         circvis : '../bower_components/visquick/vq.circvis',
 
         //datagrid
-        slickgrid: '../bower_components/slickgrid/slick.grid.js',
+        slickgrid: '../bower_components/slickgrid/slick.grid',
+        slickgrid_rowselectionmodel: '../bower_components/slickgrid/plugins/slick.rowselectionmodel',
 
         handlebars: '../bower_components/handlebars/handlebars',
 

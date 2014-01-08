@@ -32,7 +32,8 @@ define([
 
 	//utility function that determines if this is the proper model to use.
 
-	GenomicFeature.isGenomic =  function(attrs) {
+	GenomicFeature.isGenomic =  function(model) {
+		var attrs = _.keys(model);
 		var lcAttrs = _.invoke(attrs, 'toLowerCase');
 		if ( _.intersection(lcAttrs, [ 'chr', 'chromosome'] ).length === 0  ) {
 	   		return false;

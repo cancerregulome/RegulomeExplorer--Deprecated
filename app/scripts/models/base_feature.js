@@ -7,7 +7,7 @@ define([
 	var BaseFeature = Backbone.Model.extend({
 
 		initialize: function() {
-			_.bindall(this, 'clean');
+			_.bindAll(this, 'clean');
 		},
 
 		parse : function(response, options) {

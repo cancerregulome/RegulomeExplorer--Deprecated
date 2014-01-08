@@ -8,32 +8,43 @@ define([
 
 var MatrixCollection = Backbone.Collection.extend({
 
-	initialize : function() {
-		_.bindAll(this, 'getItem', 'getLength');
+	initialize : function(models, options) {
+		_.bindAll(this, 'getItem', 'getLength', 'getColumns');
+		this.url = options.url || '';
+		this.columns = _.compact([]);
 	},
 
 	isGenomic : true,
    
    //support several similar row/model types
-   model: function(attrs, options) {
-   		// do any attriubtes smell like genomic data.
-   		// names like: chr, Chr, CHR, chromosome
-	   
-	   var isGenomic = true;
-
-	   if ( GenomicFeature.isGenomic(attr) ) {
-	   	return new GenomicFeature(attr, options);
+   model: function(model, options) {
+   		
+   	   //this function is run in the model instance.  collection scope is stored in options
+   	   var self = options.collection;
+	   // collect column ids from models
+	   self.columns = _.union(self.columns, _.keys(model));
+	   // do any attributes smell like genomic data.
+	   self.isGenomic = true;
+	   if ( GenomicFeature.isGenomic(model) ) {	
+	   	return new GenomicFeature(model, options);
 	   } else {
-	   	this.isGenomic = false;
-	   	return new GenericFeature(attr, options);
+	   	self.isGenomic = false;
+	   	return new GenericFeature(model, options);
 	   }
    },
 
+   parse: function(response) {
+    return response.items;
+   },
+
+   getColumns: function() {
+   	return this.columns;
+   },
 
    // Slick.Grid DataView API requires two functions:
    // getItem returns the Item at the specified index
 	getItem : function(index) {
-		return this.at(index);
+		return _.clone(this.at(index).attributes);
 	},
 
 	// getLength returns the total length of the collection

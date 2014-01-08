@@ -5,14 +5,17 @@ define([
     'jquery',
     'backbone',
     'views/application',
-    'views/circular'
-], function (_, $, Backbone, AppView, CircularView) {
+    'views/circular',
+    'views/grid',
+    'collections/matrix'
+], function (_, $, Backbone, AppView, CircularView, GridView, MatrixCollection) {
     'use strict';
 
     var Router = Backbone.Router.extend({
             routes: {
                 '' : 'openApplication',
-                'circle' : 'openCircular'
+                'circle' : 'openCircular',
+                'grid' : 'openGrid'
             },
             openApplication : function() {
                
@@ -22,6 +25,15 @@ define([
                     el : $('#mainPanel')
                 });
                 circularView.render();
+            },
+            openGrid : function() {
+                var gridView = new GridView ({
+                    el: $('#mainPanel'),
+                    collection: new MatrixCollection( [], {
+                        url : 'svc/datastores/ds/BRCA-SEQ-20131113/feature_matrix?gene=KRAS&gene=TP53&gene=akr1c4&gene=ccnd1'
+                    })
+                });
+                gridView.render();
             }
         });
 

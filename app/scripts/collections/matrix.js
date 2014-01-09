@@ -24,7 +24,6 @@ var MatrixCollection = Backbone.Collection.extend({
 	   // collect column ids from models
 	   self.columns = _.union(self.columns, _.keys(model));
 	   // do any attributes smell like genomic data.
-	   self.isGenomic = true;
 	   if ( GenomicFeature.isGenomic(model) ) {	
 	   	return new GenomicFeature(model, options);
 	   } else {

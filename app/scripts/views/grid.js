@@ -28,8 +28,7 @@ define([
         },
 
         updateGrid: function() {
-            var slick = new SlickHelper();
-            slick.init('.slickgrid_container', this.collection);
+            var slick = new SlickHelper('.slickgrid_container', this.collection );
         }
 
     });

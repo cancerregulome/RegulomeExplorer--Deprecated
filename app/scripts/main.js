@@ -72,6 +72,7 @@ require.config({
         d3 : '../bower_components/d3/d3',
         vq : '../bower_components/visquick/vq',
         circvis : '../bower_components/visquick/vq.circvis',
+        'jquery.sparkline' : '../bower_components/kapusta-jquery.sparkline/dist/jquery.sparkline',
 
         //datagrid
         slickgrid: '../bower_components/slickgrid/slick.grid',

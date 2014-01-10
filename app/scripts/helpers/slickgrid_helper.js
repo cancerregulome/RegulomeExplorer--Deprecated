@@ -22,6 +22,34 @@ define([
 		'strand'
 	];
 
+	var columnConfigObj = {
+		'chr' : { width: 20, defaultSortAsc: false },
+		'source' : { width: 60 },
+		'end' : { formatter:  prettifyChrEndFormatter }
+	};
+
+	var valueMaps = {
+		'GNAB' : {
+			0 : 'Wildtype',
+			1 : 'Mutated'
+		}
+	};
+
+	function prettifyValues(row) { 
+		if (row['source']) {
+		return valueMaps[row['source']] || {};
+	 	}
+	 	return {};
+	}
+
+	function prettifyChrEndFormatter(row, cell, value, columnDef, dataContext) {
+	      if (value < 0) {
+	        return "";
+	      } else {
+	        return (value);
+	      }
+	  }
+
 	// capitalize - utility function
 	// trim and split whitespace, capitalize each token, join with whitespace
 	function capitalize(term) {
@@ -36,32 +64,47 @@ define([
 	}
 
 	function waitingFormatter(value) {
-		return "loading...";
+		return 'loading...';
 	}
 
-	function createRenderGraph(values_field_id) {
+	function createRenderGraph(valuesIdField) {
+		var defaults = {
+			width: '100%'
+		};
 		return function renderGraph(cellNode, row, dataContext, colDef) {
-			var data = _.without(_.values(dataContext[values_field_id]), 'NA').sort(ascNumericalSort);
+			var options = _.defaults({}, defaults);
+			var data = _.without(_.values(dataContext[valuesIdField]), 'NA').sort(ascNumericalSort);
 			var cardinality = _.uniq(data, true).length;
-			var type = 'line';
 			if (cardinality <= 3) {
-				type = 'bar';
-				var vals = _.uniq(data, true);
-				data = _.values(_.countBy(data, function(el) {
-					return el;
-				}));
+				var valueMap = prettifyValues(dataContext);
+				var counts = _.countBy(dataContext[valuesIdField], function(el) {
+					return valueMap[el] || el;
+				});
+				//TODO re-order by Value (eg. Wildtype, Mutated, NA)
+				data = _.values(counts);
+				var offset = {};
+				_.forEach(_.keys(counts), function(val, index) { offset[index] = val; });
+				_.extend(options, {
+					type : 'bar',
+					zeroAxis: false,
+					chartRangeMin: 0,
+					tooltipFormat: '{{offset:offset}} - {{value}}',
+    				tooltipValueLookups: { 'offset': offset },
+    				colorMap : [ 'blue', 'orange', 'grey' ]
+    			});
+			} else {
+				_.extend(options, {
+					type : 'line',
+					minSpotColor: '',
+					maxSpotColor: '',
+					spotColor: ''
+				});
 			}
-			$(cellNode).empty().sparkline(data, { 
-				type : type,
-				width: "100%", 
-				minSpotColor: '', 
-				maxSpotColor: '', 
-				spotColor: ''
-			} );
+			$(cellNode).empty().sparkline(data, options);
 		};
 	}
 
-	function ascNumericalSort(num1,num2) { 
+	function ascNumericalSort(num1,num2) {
 		return (num1 === num2 ? 0 : (num1 > num2 ? 1 : -1));
 	}
 
@@ -97,6 +140,7 @@ define([
 			enableCellNavigation: false,
 			enableColumnReorder: false,
 			multiColumnSort: true,
+			disableHiddenCheck: true
 		};
 	},
 
@@ -106,13 +150,13 @@ define([
 		var otherCols = _.difference(cleanList, order);
 		var wholeList = orderCols.concat(otherCols);
 		return _.map(wholeList, function(col) {
-			return {
+			return _.extend({
 				id: col,
 				name: capitalize(col),
 				field: col,
 				sortable: true,
 				resizable: true
-			};
+			}, columnConfigObj[col] || {} );
 		});
 	},
 

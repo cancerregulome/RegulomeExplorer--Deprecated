@@ -2,9 +2,10 @@ define([
 	'jquery',
 	'underscore',
 	'slickgrid',
-	'slickgrid_rowselectionmodel',
-	'jquery.sparkline'
-], function($, _, Slick) {
+	'helpers/sparkline_helper',
+	'helpers/data_source_helper',
+	'slickgrid_rowselectionmodel'
+], function($, _, Slick, SparklineHelper, DataSourceHelper) {
 	var order = [
 		'label',
 		'source',
@@ -23,32 +24,14 @@ define([
 	];
 
 	var columnConfigObj = {
-		'chr' : { width: 20, defaultSortAsc: false },
+		'chr' : { width: 40, defaultSortAsc: false },
 		'source' : { width: 60 },
 		'end' : { formatter:  prettifyChrEndFormatter }
 	};
 
-	var valueMaps = {
-		'GNAB' : {
-			0 : 'Wildtype',
-			1 : 'Mutated'
-		}
-	};
-
-	function prettifyValues(row) { 
-		if (row['source']) {
-		return valueMaps[row['source']] || {};
-	 	}
-	 	return {};
-	}
-
 	function prettifyChrEndFormatter(row, cell, value, columnDef, dataContext) {
-	      if (value < 0) {
-	        return "";
-	      } else {
-	        return (value);
-	      }
-	  }
+		return DataSourceHelper.formatChrEnd(value);
+	}
 
 	// capitalize - utility function
 	// trim and split whitespace, capitalize each token, join with whitespace
@@ -59,48 +42,31 @@ define([
 		}).join(' ');
 	}
 
-	function labelize(term) {
-		return capitalize(term);
-	}
-
 	function waitingFormatter(value) {
 		return 'loading...';
 	}
 
+	// create the rendering function. a closure to 
 	function createRenderGraph(valuesIdField) {
-		var defaults = {
-			width: '100%'
-		};
+	
 		return function renderGraph(cellNode, row, dataContext, colDef) {
-			var options = _.defaults({}, defaults);
-			var data = _.without(_.values(dataContext[valuesIdField]), 'NA').sort(ascNumericalSort);
+			// pass Sparkline.render 3 parameters
+			// target DOM element/selector
+			// array of data
+			// optional parameters (order of data and labels for bar chart)
+			var data = _.values( dataContext[valuesIdField] ).sort(ascNumericalSort);
+			var options = {};
 			var cardinality = _.uniq(data, true).length;
 			if (cardinality <= 3) {
-				var valueMap = prettifyValues(dataContext);
-				var counts = _.countBy(dataContext[valuesIdField], function(el) {
-					return valueMap[el] || el;
+				var counts = _.countBy(data, function(val) {
+					return val;
 				});
-				//TODO re-order by Value (eg. Wildtype, Mutated, NA)
-				data = _.values(counts);
-				var offset = {};
-				_.forEach(_.keys(counts), function(val, index) { offset[index] = val; });
-				_.extend(options, {
-					type : 'bar',
-					zeroAxis: false,
-					chartRangeMin: 0,
-					tooltipFormat: '{{offset:offset}} - {{value}}',
-    				tooltipValueLookups: { 'offset': offset },
-    				colorMap : [ 'blue', 'orange', 'grey' ]
-    			});
-			} else {
-				_.extend(options, {
-					type : 'line',
-					minSpotColor: '',
-					maxSpotColor: '',
-					spotColor: ''
-				});
+				// TODO re-order by Value (eg. Wildtype, Mutated, NA)
+				var formattedCounts = DataSourceHelper.decorateDataArray(dataContext['source'], counts);
+				data = formattedCounts.data;
+				options.offset = formattedCounts.offset;
 			}
-			$(cellNode).empty().sparkline(data, options);
+			SparklineHelper.render(cellNode, data, options);
 		};
 	}
 
@@ -113,14 +79,15 @@ define([
 		return ascNumericalSort(num1, num2) * sign;
 	}
 
+	//cols is object passed to SlickGrid onSort
 	function createComparator(cols) {
 		return function(dataRow1, dataRow2) {
 			for (var i = 0, l = cols.length; i < l; i++) {
 				var field = cols[i].sortCol.field;
 				var value1 = dataRow1.get(field),
 					value2 = dataRow2.get(field);
-				var result = numericalSort(value1, value2, cols[i].sortAsc)
-				if (result != 0) {
+				var result = numericalSort(value1, value2, cols[i].sortAsc);
+				if (result !== 0) {
 					return result;
 				}
 			}
@@ -185,6 +152,11 @@ define([
 
 		this.addGraphColumn('values', 'Graph');
 		this.grid.setSelectionModel(new Slick.RowSelectionModel());
+
+		matrixCollection.comparator = createComparator([{sortCol: {field: order[0]}, sortAsc: true}]);
+		matrixCollection.sort();
+		self.grid.setSortColumn(order[0],true);
+		self.grid.invalidate();
 
 		this.grid.onSort.subscribe(function(e, args) {
 			var cols = args.sortCols;

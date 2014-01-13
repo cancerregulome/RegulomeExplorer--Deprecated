@@ -4,8 +4,8 @@ define([
     'backbone',
     'routes',
     'views/application',
-    'mediator'
-], function ($, _, Backbone, Routes, AppView, Mediator) {
+    
+], function ($, _, Backbone, Routes, AppView) {
     'use strict';
 
 function loadApplicationView(){
@@ -19,12 +19,11 @@ function loadApplicationView(){
 }
 
 var RE = function() {
-    this.mediator = Mediator();
     this.routes = new Routes();
     
     this.start = function() {
         loadApplicationView();
-        Backbone.history.start({pushState: false});
+        Backbone.history.start({pushState: false });
     };
 
 };

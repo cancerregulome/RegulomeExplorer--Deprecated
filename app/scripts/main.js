@@ -88,7 +88,7 @@ require.config({
 
 require([
     'jquery', 'underscore', 'backbone', 'bootstrap', 'app', 'layoutmanager'
-], function ($, _ , Backbone, Bootrap, App, layoutmanager ) {
+], function ($, _ , Backbone, Bootstrap, App, layoutmanager ) {
 
     //Configure LayoutManager
     Backbone.Layout.configure({

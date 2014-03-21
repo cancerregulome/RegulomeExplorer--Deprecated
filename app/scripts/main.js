@@ -2,44 +2,18 @@
 'use strict';
 
 require.config({
+    baseUrl: "/scripts",
     shim: {
-        underscore: {
-            exports: '_'
-        },
-         'jQuery-ui' : {
-            'deps': ['jquery'],
-            'exports' : '$'
-        },
-        backbone: {
-            deps: [
-                'underscore',
-                'jquery'
-            ],
-            exports: 'Backbone'
-        },
-        bootstrap : {
-            deps : ['jquery','jQuery-ui'],
-            exports : 'bootstrap'
-        },
+         'jQuery-ui' : ['jquery'],
+
+        bootstrap :  ['jquery','jQuery-ui'],
+
         handlebars: {
             exports: 'Handlebars',
             init: function() {
                 this.Handlebars = Handlebars;
                 return this.Handlebars;
             }
-        },
-        d3 : {
-          exports: 'd3'  
-        },
-        vq : {
-            deps : [
-                    'd3'
-                ],
-            exports: 'vq'
-        },
-        circvis: {
-            deps : ['vq'],
-            exports : 'vq'
         },
         slickgrid: {
             deps: [
@@ -60,14 +34,17 @@ require.config({
     paths: {
         //base libraries
         underscore: '../bower_components/underscore/underscore',
-        jquery: '../bower_components/jquery/jquery',
+        jquery: '../bower_components/jquery/dist/jquery',
         'jQuery-ui': '../bower_components/jquery-ui/ui/jquery-ui',
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+
         //backbone
         backbone: '../bower_components/backbone/backbone',
-        layoutmanager : '../bower_components/layoutmanager/backbone.layoutmanager',
+        'backbone.layoutmanager' : '../bower_components/layoutmanager/backbone.layoutmanager',
+
         //logic
         'mediator-js': '../bower_components/mediator-js/lib/mediator',
+        
         //vis
         d3 : '../bower_components/d3/d3',
         vq : '../bower_components/visquick/vq',
@@ -80,25 +57,38 @@ require.config({
 
         handlebars: '../bower_components/handlebars/handlebars',
 
+        //localstorage
+        localstoragedb: '../bower_components/localStorageDB/localstoragedb',
+
         text: '../bower_components/requirejs-text/text',
         json: '../bower_components/requirejs-plugins/src/json',
-        propertyParser : '../bower_components/requirejs-plugins/propertyParser'
+        propertyParser : '../bower_components/requirejs-plugins/src/propertyParser'
     }
 });
 
 require([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'app', 'layoutmanager'
-], function ($, _ , Backbone, Bootstrap, App, layoutmanager ) {
+   'jquery',
+   'underscore',
+   'backbone',
+   'app',
+   'bootstrap',
+   'backbone.layoutmanager'
+], function ($, _ , Backbone, App, Bootstrap, layoutmanager ) {
+ 'use strict';
 
-    //Configure LayoutManager
+    Backbone.Router.namedParameters = true;
+    
+    Backbone.emulateJSON = true;
+  //Configure LayoutManager
     Backbone.Layout.configure({
         //all templates are relative to this path
         prefix: 'app/scripts/views/templates/',
         //treat all Backbone Views as Layouts
-        manage: true
+        manage: true,
+        suppressWarnings: true
     });
-
-    window.app = "RE";
+    
+    window.app = 'RE';
     window[window.app] = new App();
     //inject Backbone, jQuery, Underscore as global objects.
     window.Backbone = Backbone;

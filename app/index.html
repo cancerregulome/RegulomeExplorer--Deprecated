@@ -6,20 +6,22 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>test</title>
+        <title>Regulome Explorer</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
+        <link rel="shortcut icon" href="/favicon.ico">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-        <!-- build:css(.tmp) styles/vendor/vendor.css -->
-        <link rel="stylesheet" href="styles/vendor/bootstrap.css">
-        <link rel="stylesheet" href="styles/vendor/slick.grid.css">
-        <link rel="stylesheet" href="styles/vendor/jquery.ui.css">
+        <!-- build:css styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/slickgrid/slick.grid.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery.ui.theme.css">
         <link rel="stylesheet" href="styles/vendor/webappbase.css">
         <link rel="stylesheet" href="styles/vendor/vq.css">
+        <!-- endbower -->
         <!-- endbuild -->
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        
         <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="vendor/slick.grid.default.css">
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
         <!-- build:js scripts/vendor/modernizr.js -->
@@ -48,8 +50,12 @@
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
 
-        <!-- build:js scripts/main.js -->
-        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+        <!-- build:js scripts/plugins.js -->    
+        <script src="bower_components/requirejs/require.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js({app,.tmp}) scripts/main.js -->
+            <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
 </html>

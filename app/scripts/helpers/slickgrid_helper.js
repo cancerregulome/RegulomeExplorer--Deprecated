@@ -2,35 +2,62 @@ define([
 	'jquery',
 	'underscore',
 	'slickgrid',
-	'helpers/sparkline_helper',
+	'backbone',
 	'helpers/data_source_helper',
 	'slickgrid_rowselectionmodel'
-], function($, _, Slick, SparklineHelper, DataSourceHelper) {
+], function($, _, Slick, Backbone, DataSourceHelper) {
+'use strict';
+
+//initialize (assuming this is imported as SlickHelper):
+// var grid = new SlickHelper('selector', modifiedCollection, options);
+
+// modifiedCollection - a modified Backbone collection.  Includes the methods "getItemMetadata(index)", "getItem(index)", "getLength()"
+
+// options - SlickHelper expects a configuration object to be passed in. see the defaults below.
+// config is the individual column configuration object. specified at https://github.com/mleibman/SlickGrid/wiki/Column-Options
+// {
+// 	columns: {
+// 		order: ['prop1', 'prop2', ...],
+// 		sortedColumn: ['prop1'],
+// 		sortedColumnAsc: true,
+//		config: {
+//			'prop1' : { width: 105 },
+//			'prop2' : { width: 35, defaultSortAsc: true },
+//			'prop3' : { width: 60, formatter:  prettifyProp3 },
+//			...
+//		}
+// }
+
+	// defaults
 	var order = [
+		'value',
 		'label',
-		'source',
+		// 'gene',
+		// 'source'
 		'chr',
 		'start',
 		'end'
 	];
 
-	var hide = [
-		'values',
-		'gene',
-		'type',
-		'id',
-		'modifier',
-		'strand'
-	];
-
 	var columnConfigObj = {
-		'chr' : { width: 40, defaultSortAsc: false },
+		'gene' : { width: 105 },
+		'chr' : { width: 35, defaultSortAsc: true },
 		'source' : { width: 60 },
-		'end' : { formatter:  prettifyChrEndFormatter }
+		'end' : { formatter:  prettifyChrEndFormatter },
+		'value' : { width: 105 }
 	};
 
 	function prettifyChrEndFormatter(row, cell, value, columnDef, dataContext) {
 		return DataSourceHelper.formatChrEnd(value);
+	}
+
+	function labelize(term) {
+		var label = window[window.app].FFHelper.idToLabel(term);
+		if (label !== term) {
+			return label;
+		} else {
+			return capitalize(term);
+		}
 	}
 
 	// capitalize - utility function
@@ -95,35 +122,38 @@ define([
 		};
 	}
 
-	var SlickGridConfig = function(selector, collection) {
+	var SlickGridConfig = function(selector, collection, options) {
 		this.grid = undefined;
 		this.columns = [];
 		this.options = {};
-		this.init(selector, collection);
+		this.init(selector, collection, options);
 	};
+
+	_.extend(SlickGridConfig.prototype, Backbone.Events);
 
 	SlickGridConfig.prototype.gridConfig = function() {
 		return {
-			enableCellNavigation: false,
+			enableCellNavigation: true,
 			enableColumnReorder: false,
 			multiColumnSort: true,
-			disableHiddenCheck: true
+			disableHiddenCheck: true,
+			forceFitColumns: true
 		};
 	},
 
-	SlickGridConfig.prototype.columnConfig = function(columns) {
-		var cleanList = _.difference(columns, hide);
-		var orderCols = _.intersection(order, cleanList);
-		var otherCols = _.difference(cleanList, order);
-		var wholeList = orderCols.concat(otherCols);
-		return _.map(wholeList, function(col) {
+	SlickGridConfig.prototype.columnConfig = function(columns, options) {
+		var self = this;
+		var _order = this.columnOptions.order;
+		var orderCols = _.intersection(_order, columns );
+		var columnConfig = self.columnOptions.config || {}
+		return _.map(orderCols, function(col) {
 			return _.extend({
 				id: col,
-				name: capitalize(col),
+				name: labelize(col),
 				field: col,
 				sortable: true,
 				resizable: true
-			}, columnConfigObj[col] || {} );
+			}, columnConfig[col] || {} );
 		});
 	},
 
@@ -134,7 +164,7 @@ define([
 		});
 		var col_config = {
 			id: graph_column_id,
-			name: capitalize(graph_column_id),
+			name: labelize(graph_column_id),
 			field: graph_column_id,
 			asyncPostRender: createRenderGraph(value_field_id),
 			rerenderOnResize: true,
@@ -150,12 +180,19 @@ define([
 	SlickGridConfig.prototype.afterInit = function(matrixCollection) {
 		var self = this;
 
-		this.addGraphColumn('values', 'Graph');
+		// this.addGraphColumn('values', 'Graph');
 		this.grid.setSelectionModel(new Slick.RowSelectionModel());
 
-		matrixCollection.comparator = createComparator([{sortCol: {field: order[0]}, sortAsc: true}]);
+		matrixCollection.comparator = createComparator([
+			{
+				sortCol: {
+					field: this.columnOptions.sortedColumn || order[0]
+				}, 
+				sortAsc: this.columnOptions.sortedColumnAsc || false
+			}
+		]);
 		matrixCollection.sort();
-		self.grid.setSortColumn(order[0],true);
+		self.grid.setSortColumn( this.columnOptions.sortedColumn || order[0], true);
 		self.grid.invalidate();
 
 		this.grid.onSort.subscribe(function(e, args) {
@@ -164,14 +201,23 @@ define([
 			matrixCollection.sort();
 			self.grid.invalidate();
 		});
+		 this.grid.onSelectedRowsChanged.subscribe(function() {
+               var row_ids = self.grid.getSelectedRows();
+               self.trigger('select', row_ids.map(function(id) { return matrixCollection.at(id);} ));
+            });
 	},
 
-	SlickGridConfig.prototype.init = function(selector, collection) {
+	SlickGridConfig.prototype.init = function(selector, collection, options) {
+		$(selector).empty();
+		options = options || {};
 		this.options = this.gridConfig();
+		this.columnOptions = options.columns || { order: order, config: columnConfigObj };
 		this.columns = this.columnConfig(collection.getColumns());
 		this.grid = new Slick.Grid(selector, collection, this.columns, this.options);
 		this.afterInit(collection);
 	},
+
+
 	SlickGridConfig.prototype.update = function() {
 
 	}

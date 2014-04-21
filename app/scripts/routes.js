@@ -4,21 +4,27 @@ define([
     'underscore',
     'jquery',
     'backbone',
-    'views/application',
+    'views/dashboard',
     'views/circular',
     'views/grid',
+    'views/filters/base_filter',
     'collections/matrix'
-], function (_, $, Backbone, AppView, CircularView, GridView, MatrixCollection) {
+], function (_, $, Backbone, DashboardView, CircularView, GridView, FilterView, MatrixCollection) {
     'use strict';
 
     var Router = Backbone.Router.extend({
             routes: {
                 '' : 'openApplication',
                 'circle' : 'openCircular',
-                'grid' : 'openGrid'
+                'grid' : 'openGrid',
+                'filters' : 'openFilter'
             },
             openApplication : function() {
-               
+               $('#mainPanel').empty();
+               var dashboardView = new DashboardView( { el: $('#mainPanel') } );
+               dashboardView.render();
+               window[window.app].clearTopMenu();
+               $('body').addClass('dashboard');
             },
             openCircular : function () {
                 var circularView = new CircularView({
@@ -34,6 +40,12 @@ define([
                     })
                 });
                 gridView.render();
+            },
+            openFilter: function() {
+                var filterView = new FilterView ({
+                    el:$('#mainPanel')
+                });
+                filterView.render();
             }
         });
 

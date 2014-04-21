@@ -25,13 +25,13 @@ define([
             var circvis = new vq.CircVis(factory.config());
             circvis();
 
-            this.mediator.subscribe("search:term:selected", function(term) {
-                console.log("term selected: " + term);
+            this.mediator.subscribe('search:term:selected', function(term) {
+                console.log('term selected: ' + term);
             }, null, this);
         },
 
         consoleLog : function(term) {
-                console.log("term selected: " + term);
+                console.log('term selected: ' + term);
             }
     });
 

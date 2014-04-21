@@ -21,13 +21,17 @@ var sourceMaps = {
 var DataSourceHelper =  {
 
 	decorateDataArray : function(sourceType, data) {
-			var labeledData = this.prettifyLabels(sourceType, data);
-			var sortedData = this.sortLabeledData(sourceType, labeledData);
-			var offset = _.object( _.range(0, sortedData[0].length), sortedData[0]);
-			return {
-				offset: offset,
-				data : sortedData[1]
-			};
+		var labeledData = this.prettifyLabels(sourceType, data);
+		var sortedData = this.sortLabeledData(sourceType, labeledData);
+		var offset = _.object( _.range(0, sortedData[0].length), sortedData[0]);
+		return {
+			offset: offset,
+			data : sortedData[1]
+		};
+	},
+
+	formatChr : function(value) {
+		return value.slice(3);
 	},
 
 	formatChrEnd: function(value) {

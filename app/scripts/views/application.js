@@ -1,24 +1,39 @@
-
+// base app view.  Adds first level of structure to the Application.  Rendered after document is loaded
 define([
-    'views/base',
-    'views/topbar/topbar'
-], function (BaseView, TopbarView) {
+  'views/base',
+  'views/topbar/topbar',
+  'views/console/console'
+], function(BaseView, TopbarView, ConsoleView){
 
-    var ApplicationView = BaseView.extend({
-    	//the template file is defined relative to the path /app/scripts/templates
-    	// see main.js to modify this configuration
-        template: 'application.hbs',
+var BaseAppView = BaseView.extend({
+    template: 'application.hbs',
 
-        beforeRender: function () {
-            this.setView('#navigation-container', new TopbarView());
-        },
-        
-        //afterRender is executed immediately after the view's document fragment is injected into the DOM.
-        //This is the first opportunity to select, modify, or attach handlers to the view's DOM fragment
-        afterRender: function() {
-        	console.log('Application: Render complete.');
-        }
-    });
+    beforeRender: function () {
+      this.consoleView = new ConsoleView({ collection: new Backbone.Collection([], {} ) });
+      this.setView('#navigation-container', new TopbarView());
+      this.setView('#modal-holder', this.consoleView);
+    },
 
-    return ApplicationView;
+    afterRender: function() {
+      var self = this;
+      self.consoleView.on('nomessage', function() {
+        self.$el.find('#navbarConsoleFlag').addClass('nomessage').removeClass('message');
+      });
+      self.consoleView.on('message', function() {
+        self.$el.find('#navbarConsoleFlag').removeClass('nomessage').addClass('message');
+      });
+      
+    },
+
+    showError: function(text) {
+     this.consoleView.addError(text);
+    },
+
+    showWarning: function(text) {
+     this.consoleView.addWarning(text);
+    }
+
+});
+
+  return BaseAppView;
 });

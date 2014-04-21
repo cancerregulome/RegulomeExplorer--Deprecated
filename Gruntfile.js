@@ -1,6 +1,6 @@
-// Generated on 2013-11-20 using generator-webapp 0.4.4
+// Generated on 2014-04-16 using generator-webapp 0.4.9
 'use strict';
-var SERVER_PORT = 9000;
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -14,17 +14,37 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
+    // Configurable paths
+    var config = {
+        server_port: 9000,
+        app: 'app',
+        dist: 'dist'
+    };
 
     grunt.initConfig({
-        
-        // Project settings
-        config: {
-            // Configurable paths
-            app: 'app',
-            dist: 'dist'
-        },
+        // configurable paths
+        config: config,
 
+        // Watches files for changes and runs tasks based on the changed files
         watch: {
+            bower: {
+                files: ['bower.json'],
+                tasks: ['bowerInstall']
+            },
+            js: {
+                files: ['<%= config.app %>/scripts/{,*/}*.js'],
+                tasks: ['jshint'],
+                options: {
+                    livereload: true
+                }
+            },
+            jstest: {
+                files: ['test/spec/{,*/}*.js'],
+                tasks: ['test:watch']
+            },
+            gruntfile: {
+                files: ['Gruntfile.js']
+            },
             styles: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
                 tasks: ['newer:copy:styles', 'autoprefixer']
@@ -34,8 +54,9 @@ module.exports = function(grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= config.app %>/*.html',
+                    '<%= config.app %>/{,*/}*.html',    
                     '.tmp/styles/{,*/}*.css',
+                    '{.tmp,<%= config.app %>}/scripts/{,*/}*.js',
                     '<%= config.app %>/images/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
                 ]
             },
@@ -45,24 +66,10 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['handlebars']
             },
-            gruntfile: {
-                files: ['Gruntfile.js']
-            },
-            jstest: {
-                files: ['test/spec/{,*/}*.js'],
-                tasks: ['test:watch']
-            },
-            js: {
-                files: ['<%= config.app %>/scripts/{,*/}*.js'],
-//                tasks: ['jshint'],
-                options: {
-                    livereload: true
-                }
-            },
         },
         connect: {
             options: {
-                port: SERVER_PORT,
+                port: config.server_port,
                 livereload: 35729,
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: '0.0.0.0'
@@ -88,39 +95,32 @@ module.exports = function(grunt) {
                     ],
                     middleware: function(connect, options) {
                         // Same as in grunt-contrib-connect
-                        var middlewares = [];
-                        var directory = options.directory ||
-                            options.base[options.base.length - 1];
-                        if (!Array.isArray(options.base)) {
-                            options.base = [options.base];
-                        }
-
-                        // Add Proxy middleware
-                        middlewares.push(proxySnippet);
-
-                        // Same as in grunt-contrib-connect
-                        options.base.forEach(function(base) {
-                            middlewares.push(connect.static(base));
-                        });
-
-                        middlewares.push(connect.directory(directory));
-                        return middlewares;
+                       return [
+                            proxySnippet,
+                            connect.static('.tmp'),
+                            connect().use('/bower_components', connect.static('./bower_components')),
+                            connect.static(config.app)
+                        ];
                     }
                 }
             },
             test: {
                 options: {
+                    open: false,
                     port: 9001,
-                    base: [
-                        '.tmp',
-                        'test',
-                        '<%= config.app %>'
-                    ]
+                    middleware: function(connect) {
+                        return [
+                            proxySnippet,
+                            connect.static('.tmp'),
+                            connect.static('test'),
+                            connect().use('/bower_components', connect.static('./bower_components')),
+                            connect.static(config.app)
+                        ];
+                    }
                 }
             },
             dist: {
                 options: {
-                    open: true,
                     base: '<%= config.dist %>',
                     livereload: false
                 }
@@ -143,12 +143,8 @@ module.exports = function(grunt) {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
                 options: {
-                    
-                    baseUrl: '<%= config.app %>/scripts/',
-                    mainConfigFile : '<%= config.app %>/scripts/main.js',
-                    name: 'main',
-                    out            : '.tmp/concat/scripts/main.js',
-
+                    // `name` and `out` is set by grunt-usemin
+                    baseUrl: '<%= config.app %>/scripts',
                     optimize: 'none',
                     paths: {
                         'templates': '../../.tmp/scripts/templates'
@@ -201,25 +197,37 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        // not used since Uglify task does concat,
-        // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
-        // not enabled since usemin task does concat and uglify
-        // check index.html to edit your build targets
-        // enable this task if you prefer defining your build targets here
-        /*uglify: {
-            dist: {}
-        },*/
-      // Automatically inject Bower components into the HTML file
+        // By default, your `index.html`'s <!-- Usemin block --> will take care of
+        // minification. These next options are pre-configured if you do not wish
+        // to use the Usemin blocks.
+        // cssmin: {
+        //     dist: {
+        //         files: {
+        //             '<%= config.dist %>/styles/main.css': [
+        //                 '.tmp/styles/{,*/}*.css',
+        //                 '<%= config.app %>/styles/{,*/}*.css'
+        //             ]
+        //         }
+        //     }
+        // },
+        // uglify: {
+        //     dist: {
+        //         files: {
+        //             '<%= config.dist %>/scripts/scripts.js': [
+        //                 '<%= config.dist %>/scripts/scripts.js'
+        //             ]
+        //         }
+        //     }
+        // },
+        // concat: {
+        //     dist: {}
+        // },
         bowerInstall: {
             app: {
                 src: ['<%= config.app %>/index.html'],
-                ignorePath: '<%= config.app %>/'
+                exclude: ['bower_components/bootstrap/dist/js/bootstrap.js']
             }
         },
-
         rev: {
             dist: {
                 files: {
@@ -227,8 +235,7 @@ module.exports = function(grunt) {
                         '<%= config.dist %>/scripts/{,*/}*.js',
                         '<%= config.dist %>/styles/{,*/}*.css',
                         // '<%= config.dist %>/images/{,*/}*.{gif,jpeg,jpg,png,webp}',
-                        '<%= config.dist %>/styles/fonts/{,*/}*.*',
-                        '<%= config.dist %>/*.{ico,png}'
+                        '<%= config.dist %>/styles/fonts/{,*/}*.*'
                     ]
                 }
             }
@@ -254,13 +261,6 @@ module.exports = function(grunt) {
                             'css': ['concat', 'cssmin']
                         },
                         post: {}
-                    },
-                    html: {
-                        steps: {
-                            'js': ['concat','uglifyjs'],
-                            'css': ['concat', 'cssmin']
-                        },
-                        post: {}
                     }
                 }
             },
@@ -269,7 +269,7 @@ module.exports = function(grunt) {
         },
         usemin: {
             options: {
-                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
+                assetsDirs: ['<%= config.dist %>']
             },
             html: ['<%= config.dist %>/{,*/}*.html'],
             css: ['<%= config.dist %>/styles/{,*/}*.css']
@@ -284,7 +284,7 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        // cssmin: {
+        cssmin: {
             // This task is pre-configured if you do not wish to use Usemin
             // blocks for your CSS. By default, the Usemin block from your
             // `index.html` will take care of minification, e.g.
@@ -299,7 +299,7 @@ module.exports = function(grunt) {
             //         ]
             //     }
             // }
-        // },
+        },
         htmlmin: {
             dist: {
                 options: {
@@ -332,7 +332,6 @@ module.exports = function(grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'images/{,*/}*.{webp,gif,png,jpg,bmp}',
-                        '{,*/}*.html',
                         'fonts/{,*/}*.*'
                     ]
                 }]
@@ -409,39 +408,30 @@ module.exports = function(grunt) {
         grunt.task.run(['serve']);
     });
 
-    grunt.registerTask('test', function (target) {
-         if (target !== 'watch') {
-            grunt.task.run([
-                'clean:server',
-                'createDefaultTemplate',
-                'concurrent:test',
-                'autoprefixer'
-            ]);
-        }
-
-        grunt.task.run([
-            'connect:test',
-            'mocha'
-        ]);
-    });
+    grunt.registerTask('test', [
+        'clean:server',
+        'concurrent:test',
+        'createDefaultTemplate',
+        'autoprefixer',
+        'connect:test',
+        'mocha'
+    ]);
 
     grunt.registerTask('pack', [
         'clean:dist',
         'createDefaultTemplate',
         'handlebars',
         'useminPrepare:pack',
+        'requirejs',
         'concurrent:dist',
         'autoprefixer',
         'concat',
-        'requirejs:dist',
         'cssmin',
         // 'modernizr',
         'copy:dist',
         'copy:pack',
-        
         'rev',
-        'usemin',
-        'htmlmin'
+        'usemin'
     ]);
 
 
@@ -450,22 +440,20 @@ module.exports = function(grunt) {
         'createDefaultTemplate',
         'handlebars',
         'useminPrepare:html',
+        'requirejs',
         'concurrent:dist',
         'autoprefixer',
         'concat',
-        'requirejs:dist',
         'cssmin',
         'uglify',
         // 'modernizr',
         'copy:dist',
-        
         'rev',
-        'usemin',
-        'htmlmin'
+        'usemin'
     ]);
 
     grunt.registerTask('default', [
-//        'newer:jshint',
+        'newer:jshint',
         'test',
         'build'
     ]);

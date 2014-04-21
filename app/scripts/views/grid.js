@@ -24,7 +24,6 @@ define([
         afterRender: function() {
             var self = this;
             this.collection.fetch().done(self.updateGrid);
-            
         },
 
         updateGrid: function() {

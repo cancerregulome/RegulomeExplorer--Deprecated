@@ -1,24 +1,28 @@
 {
-  "name": "test",
+  "name": "RegulomeExplorer",
   "version": "0.0.0",
   "dependencies": {
+    "crossfilter": "~1.3.7",
+    "backbone-query-parameters": "*",
+    "science": "git://github.com/jasondavies/science.js.git#1.9.1",
+    "carve": "~0.1.5",
     "jquery": "~2.1.0",
     "underscore": "~1.6.0",
     "backbone": "~1.1.2",
     "requirejs": "~2.1.9",
     "requirejs-text": "~2.0.10",
     "modernizr": "~2.7.0",
-    "handlebars": "~1.3.0",
     "mediator-js": "~0.9.6",
-    "layoutmanager": "d62ff85341737b35cecada87739565b65ca27dcc",
+    "handlebars": "~1.3.0",
+    "layoutmanager": "~0.9.5",
     "requirejs-plugins": "~1.0.2",
-    "d3": "~3.4.0",
+    "d3": "~3.4.0 ",
     "visquick": "~0.1.2",
-    "localstorageDB": "git://github.com/knadh/localStorageDB.git#2ed897c9e9fbd6cea856eec22697f582db85d914",
     "bootstrap": "~3.0.3",
     "jquery-ui": "~1.10.3",
     "slickgrid": "~2.1.0",
-    "kapusta-jquery.sparkline": "~2.1.3"
+    "kapusta-jquery.sparkline": "~2.1.3",
+    "localStorageDB": "git://github.com/knadh/localStorageDB.git#v2.3"
   },
   "devDependencies": {}
 }

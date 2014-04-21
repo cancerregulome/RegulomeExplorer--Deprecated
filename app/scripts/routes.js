@@ -30,7 +30,7 @@ define([
                 var gridView = new GridView ({
                     el: $('#mainPanel'),
                     collection: new MatrixCollection( [], {
-                        url : 'svc/datastores/ds/BRCA-SEQ-20131113/feature_matrix?gene=KRAS&gene=TP53&gene=akr1c4&gene=ccnd1'
+                        url : 'svc/datastores/20140404/BRCA/feature_matrix?gene=KRAS&gene=TP53&gene=akr1c4&gene=ccnd1'
                     })
                 });
                 gridView.render();

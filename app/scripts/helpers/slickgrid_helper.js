@@ -24,10 +24,14 @@ define([
 	];
 
 	var columnConfigObj = {
-		'chr' : { width: 40, defaultSortAsc: false },
+		'chromosome' : { width: 40, defaultSortAsc: false, formatter: prettifyChrFormatter },
 		'source' : { width: 60 },
 		'end' : { formatter:  prettifyChrEndFormatter }
 	};
+
+	function prettifyChrFormatter(row, cell, value, columnDef, dataContext) {
+		return DataSourceHelper.formatChr(value);
+	}
 
 	function prettifyChrEndFormatter(row, cell, value, columnDef, dataContext) {
 		return DataSourceHelper.formatChrEnd(value);
@@ -107,7 +111,8 @@ define([
 			enableCellNavigation: false,
 			enableColumnReorder: false,
 			multiColumnSort: true,
-			disableHiddenCheck: true
+			disableHiddenCheck: true,
+			forceFitColumns: true
 		};
 	},
 

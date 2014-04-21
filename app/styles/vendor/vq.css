@@ -50,7 +50,9 @@ svg .wedge .background {
 	fill:rgba(255,255,255,0.7);
 	stroke:none;
 	stroke-width:0;
-*/}
+}
+*/
+
 svg .wedge[data-ring="0"] .background {
 	fill:none;
 	stroke:none;

@@ -9,7 +9,7 @@
     "jquery": "~2.1.0",
     "underscore": "~1.6.0",
     "backbone": "~1.1.2",
-    "requirejs": "~2.1.9",
+    "requirejs": "~2.1.10",
     "requirejs-text": "~2.0.10",
     "modernizr": "~2.7.0",
     "mediator-js": "~0.9.6",

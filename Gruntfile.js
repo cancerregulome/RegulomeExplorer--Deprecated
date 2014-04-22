@@ -377,7 +377,7 @@ module.exports = function(grunt) {
             dist: [
                 'copy:styles',
                 'handlebars',
-                'svgmin',
+                // 'svgmin',
                 'htmlmin'
             ]
         }
@@ -397,7 +397,7 @@ module.exports = function(grunt) {
             'clean:server',
             'concurrent:server',
 	        'configureProxies',
-            'autoprefixer',
+            // 'autoprefixer',
             'connect:livereload',
             'watch'
         ]);
@@ -412,7 +412,7 @@ module.exports = function(grunt) {
         'clean:server',
         'concurrent:test',
         'createDefaultTemplate',
-        'autoprefixer',
+        // 'autoprefixer',
         'connect:test',
         'mocha'
     ]);
@@ -424,7 +424,7 @@ module.exports = function(grunt) {
         'useminPrepare:pack',
         'requirejs',
         'concurrent:dist',
-        'autoprefixer',
+        // 'autoprefixer',
         'concat',
         'cssmin',
         // 'modernizr',
@@ -442,7 +442,7 @@ module.exports = function(grunt) {
         'useminPrepare:html',
         'requirejs',
         'concurrent:dist',
-        'autoprefixer',
+        // 'autoprefixer',
         'concat',
         'cssmin',
         'uglify',

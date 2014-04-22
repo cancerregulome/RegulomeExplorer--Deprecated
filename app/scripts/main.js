@@ -35,8 +35,6 @@ require.config({
         slickgrid_rowselectionmodel: '../bower_components/slickgrid/plugins/slick.rowselectionmodel',
         "jquery-drag": "../bower_components/slickgrid/lib/jquery.event.drag-2.2",
 
-        spinner: '../bower_components/spin.js/spin',
-
         handlebars: '../bower_components/handlebars/handlebars',
 
         text: '../bower_components/requirejs-text/text',

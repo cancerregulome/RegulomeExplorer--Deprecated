@@ -7,7 +7,7 @@ define([
     'helpers/circvis_helper',
     'vq',
     'circvis'
-], function ($, _, Backbone, BaseView, CircvisConfigFactory, vq, Circvis) {
+], function ($, _, Backbone, BaseView, CircvisConfigFactory, vq) {
 
     var CircularView = BaseView.extend({
     	//the template file is defined relative to the path /app/scripts/templates

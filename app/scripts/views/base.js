@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'templates',
+    'module_mediator',
     'backbone.layoutmanager'
-], function ($, _, Backbone, JST) {
+], function ($, _, Backbone, JST, ModuleMediator) {
     'use strict';
 
     var BaseView = Backbone.Layout.extend({
@@ -16,6 +17,12 @@ define([
 
         constructor: function() {
             Backbone.Layout.apply(this,arguments);
+            this.mediator = ModuleMediator();
+            var subs = this.subscriptions;
+            for (var key in this.subscriptions) {
+                if (typeof this[subs[key]] === 'function') this.mediator.subscribe(key, this[subs[key]], null, null);
+            }
+
         }
 
     });

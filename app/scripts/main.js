@@ -33,7 +33,7 @@ require.config({
         slickcore: '../bower_components/slickgrid/slick.core',
         slickgrid: '../bower_components/slickgrid/slick.grid',
         slickgrid_rowselectionmodel: '../bower_components/slickgrid/plugins/slick.rowselectionmodel',
-        "jquery-drag": "../bower_components/slickgrid/lib/jquery.event.drag-2.2",
+        'jquery-drag': '../bower_components/slickgrid/lib/jquery.event.drag-2.2',
 
         handlebars: '../bower_components/handlebars/handlebars',
 
@@ -58,11 +58,11 @@ require.config({
                 return this.Handlebars;
             }
         },
-        "jquery-drag": ['jQuery-ui'],
+        'jquery-drag': ['jQuery-ui'],
         slickgrid: {
             deps: [
-                "jquery-drag",
-                "slickcore"
+                'jquery-drag',
+                'slickcore'
             ],
             exports: 'Slick'
         },
@@ -96,7 +96,7 @@ require([
         suppressWarnings: true
     });
 
-    window.app = "RE";
+    window.app = 'RE';
     window[window.app] = new App();
     //inject Backbone, jQuery, Underscore as global objects.
     window.Backbone = Backbone;

@@ -139,28 +139,38 @@ module.exports = function(grunt) {
             },
             server: '.tmp'
         },
+        bower: {
+            target: {
+                rjsConfig: '<%= config.app %>/main.js'
+            }
+        },
         requirejs: {
             dist: {
-                // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
                 options: {
-                    // `name` and `out` is set by grunt-usemin
-                    baseUrl: '<%= config.app %>/scripts',
+                    mainConfigFile: '<%= config.app %>/scripts/main.js',
+                    appDir: '<%= config.app %>',
+                    baseURL: './scripts',
+                    dir: '<%= config.dist %>/scripts',
+                    almond: true,
+
+                    replaceRequireScript: [{
+                        files: ['<%= config.dist %>/index.html'],
+                        module: 'main'
+                    }],
+
+                    modules: [{name: 'main'}],
+
                     optimize: 'none',
+                    optimizeCss: 'none',
                     paths: {
                         'templates': '../../.tmp/scripts/templates'
                     },
-                    // TODO: Figure out how to make sourcemaps work with grunt-usemin
-                    // https://github.com/yeoman/grunt-usemin/issues/30
-                    // generateSourceMaps: true,
-                    // required to support SourceMaps
-                    // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
                     useStrict: true,
                     wrap: true,
                     // prevent build from packing plugins.  
                     // Built application cannot dynamically load files.
                     stubModules: ['json', 'text']
-                    //uglify2: {} // https://github.com/mishoo/UglifyJS2
                 }
             }
         },
@@ -377,7 +387,6 @@ module.exports = function(grunt) {
             dist: [
                 'copy:styles',
                 'handlebars',
-                // 'svgmin',
                 'htmlmin'
             ]
         }
@@ -397,7 +406,7 @@ module.exports = function(grunt) {
             'clean:server',
             'concurrent:server',
 	        'configureProxies',
-            // 'autoprefixer',
+            'autoprefixer',
             'connect:livereload',
             'watch'
         ]);
@@ -412,7 +421,7 @@ module.exports = function(grunt) {
         'clean:server',
         'concurrent:test',
         'createDefaultTemplate',
-        // 'autoprefixer',
+        'autoprefixer',
         'connect:test',
         'mocha'
     ]);
@@ -424,7 +433,7 @@ module.exports = function(grunt) {
         'useminPrepare:pack',
         'requirejs',
         'concurrent:dist',
-        // 'autoprefixer',
+        'autoprefixer',
         'concat',
         'cssmin',
         // 'modernizr',
@@ -434,7 +443,6 @@ module.exports = function(grunt) {
         'usemin'
     ]);
 
-
     grunt.registerTask('build', [
         'clean:dist',
         'createDefaultTemplate',
@@ -442,10 +450,10 @@ module.exports = function(grunt) {
         'useminPrepare:html',
         'requirejs',
         'concurrent:dist',
-        // 'autoprefixer',
+        'autoprefixer',
         'concat',
         'cssmin',
-        'uglify',
+        // 'uglify',
         // 'modernizr',
         'copy:dist',
         'rev',
@@ -454,6 +462,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', [
         // 'newer:jshint',
+        'bower',
         'test',
         'build'
     ]);

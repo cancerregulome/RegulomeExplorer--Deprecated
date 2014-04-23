@@ -147,18 +147,11 @@ module.exports = function(grunt) {
         requirejs: {
             dist: {
                 options: {
+
+                    name: 'main',
+                    out: '<%= config.dist %>/scripts/main.js',
+                    baseUrl: '<%= config.app %>/scripts',
                     mainConfigFile: '<%= config.app %>/scripts/main.js',
-                    appDir: '<%= config.app %>',
-                    baseURL: './scripts',
-                    dir: '<%= config.dist %>/scripts',
-                    almond: true,
-
-                    replaceRequireScript: [{
-                        files: ['<%= config.dist %>/index.html'],
-                        module: 'main'
-                    }],
-
-                    modules: [{name: 'main'}],
 
                     optimize: 'none',
                     optimizeCss: 'none',
@@ -262,21 +255,31 @@ module.exports = function(grunt) {
             }
         },
         useminPrepare: {
+            html : '<%= config.app %>/index.html',
+            pack : '<%= config.app %>/index.html',
+            
+            src: '<%= config.app %>/index.html',
             options: {
                 dest: '<%= config.dist %>',
                 flow: {
-                    pack: {
+                    pack : {
                         steps: {
                             'js': ['concat'],
                             'css': ['concat', 'cssmin']
                         },
                         post: {}
+                    },
+                    html: {
+                        steps: {
+                            'js': ['concat', 'uglifyjs'],
+                            'css': ['concat', 'cssmin']
+                        },
+                        post: {}
                     }
                 }
-            },
-            html: '<%= config.app %>/index.html',
-            pack: '<%= config.app %>/index.html'
+            }
         },
+            
         usemin: {
             options: {
                 assetsDirs: ['<%= config.dist %>']
@@ -341,6 +344,7 @@ module.exports = function(grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
+                        '{,*/}*.html',
                         'images/{,*/}*.{webp,gif,png,jpg,bmp}',
                         'fonts/{,*/}*.*'
                     ]
@@ -384,11 +388,16 @@ module.exports = function(grunt) {
                 'copy:styles',
                 'handlebars'
             ],
-            dist: [
-                'copy:styles',
-                'handlebars',
-                'htmlmin'
-            ]
+            dist: {
+                options: {
+                    logConcurrentOutput: true,
+                    limit: 3
+                },
+                tasks: [
+                    'copy:styles',
+                    'handlebars'
+                ]
+            }
         }
     });
 
@@ -448,16 +457,17 @@ module.exports = function(grunt) {
         'createDefaultTemplate',
         'handlebars',
         'useminPrepare:html',
-        'requirejs',
         'concurrent:dist',
         'autoprefixer',
         'concat',
+        'requirejs',
         'cssmin',
-        // 'uglify',
+        'uglify',
         // 'modernizr',
         'copy:dist',
         'rev',
-        'usemin'
+        'usemin',
+        // 'htmlmin'
     ]);
 
     grunt.registerTask('default', [

@@ -1,17 +1,21 @@
+<div>
+	<select class="filter-attributes">
+	{{#each attribute~}}
+		<option>
+			{{label}}
+		</option>
+	{{/each}}
+	</select>
 
+	<select class="filter-operation">
+	{{#each operation~}}
+		<option>
+			{{label}}
+		</option>
+	{{/each}}
+	</select>
 
-<select class="filter-attributes">
-{{#each attribute~}}
-	<option>
-		{{}}
-	</option>
-{{/each}}
-</select>
+	<input type="text" class="filter-predicate">
 
-<select class="filter-operation">
-
-</select>
-
-<input type="text" class="filter-predicate">
-
-<a type="button"><span class="glyphicon glyphicon-plus"></span></a>
+	<a type="button"><span class="glyphicon glyphicon-plus"></span></a>
+</div>

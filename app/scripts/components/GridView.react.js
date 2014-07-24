@@ -3,11 +3,12 @@ module React from 'react';
 class _GridView {
     render() {
         return (
-        React.DOM.div({
-            className: 'slickgrid-container'
-        }, React.DOM.div({
-            className: 'slickgrid'
-        }, 'Grid')));
+            new React.DOM.div({
+                className: 'slickgrid-container'
+            }, 
+            new React.DOM.div({
+                className: 'slickgrid'
+            }, 'Grid')));
     }
 }
 

@@ -1,32 +1,6 @@
 module React from 'react';
 
-import _ from 'underscore';
-
-
-// TableSorter Config
-const CONFIG = {
-    sort: {
-        column: 'col2',
-        order: 'desc'
-    },
-    columns: {
-        col1: {
-            name: 'Col1',
-            filterText: '',
-            defaultSortOrder: 'desc'
-        },
-        col2: {
-            name: 'Col2',
-            filterText: '>= 30',
-            defaultSortOrder: 'desc'
-        },
-        col3: {
-            name: 'Col3',
-            filterText: 's',
-            defaultSortOrder: 'desc'
-        }
-    }
-};
+module _ from 'underscore';
 
 // Inequality function map for the filtering
 const operators = {
@@ -50,28 +24,12 @@ class _GridView {
     }
 
     componentWillReceiveProps(nextProps) {
-        // Load new data when the dataSource property changes.
-        if (nextProps.dataSource !== this.props.dataSource) {
-            this.loadData(nextProps.dataSource);
-        }
-    }
-
-    componentWillMount() {
-        this.loadData(this.props.dataSource);
-    }
-
-    loadData(dataSource) {
-
-        if (!dataSource) {
-            return;
-        }
-
-        $.get(dataSource).done((data) => {
-            console.log('Received data');
-            this.setState({
-                items: data
+        // Load new data when the data property changes.
+        if (nextProps.data !== this.props.data) {
+           this.setState({
+                items: nextProps.data
             });
-        }).fail((error, a, b) => console.log('Error loading JSON'));
+        }
     }
 
     handleFilterTextChange(column) {
@@ -143,15 +101,16 @@ class _GridView {
         );
 
         var sortedItems = _.sortBy(filteredItems, this.state.sort.column);
+        
         if (this.state.sort.order === 'desc') {
             sortedItems.reverse();
         }
 
-        var headerExtra = () => columnNames.map((c) => React.dom.th({
+        var headerExtra = () => columnNames.map((c) => React.DOM.th({
             className: 'header-extra'
         }, this.state.columns[c].name), this);
 
-        var cell = (x) => columnNames.map((c) => React.dom.td(null, x[c]), this);
+        var cell = (x) => columnNames.map((c) => React.DOM.td(null, x[c]), this);
 
         sortedItems.forEach((item, idx) => {
             var headerRepeat = parseInt(this.props.headerRepeat, 10);
@@ -159,10 +118,10 @@ class _GridView {
                 (idx > 0) &&
                 (idx % this.props.headerRepeat === 0)) {
 
-                rows.push(React.dom.tr(null, headerExtra()));
+                rows.push(React.DOM.tr(null, headerExtra()));
             }
 
-            rows.push(React.dom.tr({
+            rows.push(React.DOM.tr({
                 key: item.id
             }, cell(item)));
         });
@@ -175,30 +134,29 @@ class _GridView {
         };
 
         var header = columnNames.map((c) =>
-            React.dom.th({
+            React.DOM.th({
                 onClick: this.sortColumn(c),
                 className: 'header ' + this.sortClass(c)
             }, this.state.columns[c].name), this);
 
         var filterInputs = columnNames.map((c) =>
-            React.dom.td(null, React.dom.input({
+            React.DOM.td(null, React.DOM.input({
                 type: 'text',
                 valueLink: filterLink(c)
             }, null)), this);
 
-        return React.dom.table({
+        return React.DOM.table({
             cellSpacing: 0,
-            className: 'tablesorter'
+            className: 'table-sortable'
         }, [
-            React.dom.thead(null, [
-                React.dom.tr(null, header),
-                React.dom.tr(null, filterInputs)
+            React.DOM.thead(null, [
+                React.DOM.tr(null, header),
+                React.DOM.tr(null, filterInputs)
             ]),
-            React.dom.tbody(null, rows)
+            React.DOM.tbody(null, rows)
         ]);
     }
 }
 
 
-export
-const GridView = React.createClass(_GridView.prototype);
+export const GridView = React.createClass(_GridView.prototype);

@@ -2,23 +2,23 @@ module React from 'react';
 import {
     GridView
 }
-from './components/GridView.react.js';
+from './components/grid/GridView.react.js';
+
+import {GenomicGridConfig} from './configs/Genomic.grid.js';
 
 var data = [];
 for (var i = 0; i < 500; i++) {
     data[i] = {
-        title: 'Task ' + i,
-        duration: '5 days',
-        percentComplete: Math.round(Math.random() * 100),
-        start: '01/01/2009',
-        finish: '01/05/2009',
-        effortDriven: (i % 5 === 0)
+        Gene: 'gene ' + i,
+        Chr: Math.round(Math.random() * 21 + 1)  +'',
+        Position: Math.round(Math.random() * 90000000)
     };
 }
 
 const render = () => React.renderComponent(
     new GridView({
-        data: data
+        initialItems: data,
+        config: GenomicGridConfig.getConfig()
     }),
     document.getElementById('content')
 );

@@ -12,5 +12,5 @@
 var load = require('./gulp');
 var gulp = require('gulp');
  
-gulp.task('build', ['lint', 'browserify', 'images', 'copy']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('build', ['lint', 'browserify', 'images', 'copy', 'styles']);
+gulp.task('default', ['watch', 'build']);

@@ -2,13 +2,24 @@ module React from 'react';
 
 module _ from 'underscore';
 
+import {
+    GridRow
+}
+from './GridRow.react.js';
+
+import {
+    GridHeader
+}
+from './GridHeader.react.js';
+
 // Inequality function map for the filtering
 const operators = {
     '<': (x, y) => x < y,
     '<=': (x, y) => x <= y,
     '>': (x, y) => x > y,
     '>=': (x, y) => x >= y,
-    '==': (x, y) => x === y
+    '==': (x, y) => x === y,
+    'abs >=': (x,y) => Math.abs(x) >= y
 };
 
 class _GridView {
@@ -26,7 +37,7 @@ class _GridView {
     componentWillReceiveProps(nextProps) {
         // Load new data when the data property changes.
         if (nextProps.data !== this.props.data) {
-           this.setState({
+            this.setState({
                 items: nextProps.data
             });
         }
@@ -75,7 +86,7 @@ class _GridView {
         var columnNames = this.columnNames();
         var filters = {};
 
-        var operandRegex = /^((?:(?:[<>]=?)|==))\s?([-]?\d+(?:\.\d+)?)$/;
+        var operandRegex = /^((?:(?:[<>]=?)|==))\s*([-]?\d+(?:\.\d+)?)$/;
 
         columnNames.forEach((column) => {
             var filterText = this.state.columns[column].filterText;
@@ -86,12 +97,10 @@ class _GridView {
                 if (operandMatch && operandMatch.length === 3) {
                     //filters[column] = Function.apply(null, ['x', 'return x ' + operandMatch[1] + ' ' + operandMatch[2]]);
                     filters[column] = (function(match) {
-                        return function(x) {
-                            return operators[match[1]](x, match[2]);
-                        };
+                        return (x) => operators[match[1]](x, match[2]);
                     })(operandMatch);
                 } else {
-                    filters[column] = (x) => (x.toString().toLowerCase().indexOf(filterText.toLowerCase()) > -1);
+                    filters[column] = (x) => (x !== null ? x.toString().toLowerCase().indexOf(filterText.toLowerCase()) > -1 : false);
                 }
             }
         }, this);
@@ -101,62 +110,69 @@ class _GridView {
         );
 
         var sortedItems = _.sortBy(filteredItems, this.state.sort.column);
-        
+
         if (this.state.sort.order === 'desc') {
             sortedItems.reverse();
         }
 
-        var headerExtra = () => columnNames.map((c) => React.DOM.th({
-            className: 'header-extra'
-        }, this.state.columns[c].name), this);
+        var filterLink = (column) => {
+            return {
+                value: this.state.columns[column].filterText,
+                requestChange: this.handleFilterTextChange(column).bind(this)
+            };
+        };
 
-        var cell = (x) => columnNames.map((c) => React.DOM.td(null, x[c]), this);
+        var columnConfig = columnNames.map((c) => {
+            return {
+                id: c,
+                name: this.state.columns[c].name,
+                sortFn: this.sortColumn(c).bind(this),
+                sortClass: this.sortClass(c),
+                filterLink: filterLink(c)
+            };
+        });
+
+
+        var visibleColumnProps = columnConfig.filter( (c) => !this.state.columns[c.id].hidden );
+
+        var visibleColumnNames = visibleColumnProps.map((c) => c.id);
+
+        var visibleColumnConfig = visibleColumnNames.map( (c) => {
+            return _.extend( {id: c}, this.state.columns[c] );
+            });
 
         sortedItems.forEach((item, idx) => {
+            //render repeat header at requested interval
             var headerRepeat = parseInt(this.props.headerRepeat, 10);
             if ((this.props.headerRepeat > 0) &&
                 (idx > 0) &&
                 (idx % this.props.headerRepeat === 0)) {
 
-                rows.push(React.DOM.tr(null, headerExtra()));
+                rows.push(new GridHeader({
+                    config: visibleColumnProps,
+                    extra: true
+                }));
             }
-
-            rows.push(React.DOM.tr({
-                key: item.id
-            }, cell(item)));
+            //render row of values
+            rows.push(new GridRow({
+                item: item,
+                columns: visibleColumnConfig,
+                onClick: (e, item) => console.info(item)
+            }));
         });
-
-        var filterLink = (column) => {
-            return {
-                value: this.state.columns[column].filterText,
-                requestChange: this.handleFilterTextChange(column)
-            };
-        };
-
-        var header = columnNames.map((c) =>
-            React.DOM.th({
-                onClick: this.sortColumn(c),
-                className: 'header ' + this.sortClass(c)
-            }, this.state.columns[c].name), this);
-
-        var filterInputs = columnNames.map((c) =>
-            React.DOM.td(null, React.DOM.input({
-                type: 'text',
-                valueLink: filterLink(c)
-            }, null)), this);
 
         return React.DOM.table({
             cellSpacing: 0,
             className: 'table-sortable'
         }, [
-            React.DOM.thead(null, [
-                React.DOM.tr(null, header),
-                React.DOM.tr(null, filterInputs)
-            ]),
+            new GridHeader({
+                config: visibleColumnProps
+            }),
             React.DOM.tbody(null, rows)
         ]);
     }
 }
 
 
-export const GridView = React.createClass(_GridView.prototype);
+export
+const GridView = React.createClass(_GridView.prototype);

@@ -65,7 +65,7 @@ function updateAll(updates) {
  * @param  {string} id
  */
 
-function destroy(id) {
+function remove(id) {
   delete _associations[id];
 }
 
@@ -73,11 +73,12 @@ function destroy(id) {
  * Delete all the completed AL items.
  */
 
-function destroyAll() {
+function removeAll() {
   for (var id in _associations) {
-    destroy(id);
+    remove(id);
   }
 }
+
 class ALStore extends EventEmitter {
 
   /**
@@ -126,11 +127,11 @@ ap.register(function(payload) {
     break;
 
   case ALConstants.AL_REMOVE_ASSOC:
-    destroy(action.id);
+    remove(action.id);
     break;
 
   case ALConstants.AL_REMOVE_ALL:
-    destroyAll();
+    removeAll();
     break;
 
   case ALConstants.AL_UPDATE:
@@ -145,14 +146,6 @@ ap.register(function(payload) {
     if (obj !== null) {
       updateAll(obj);
     }
-    break;
-
-  case ALConstants.AL_DESTROY:
-    destroy(action.id);
-    break;
-
-  case ALConstants.AL_DESTROY_ALL:
-    destroyAll();
     break;
 
   default:

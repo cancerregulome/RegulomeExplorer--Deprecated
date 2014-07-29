@@ -11,6 +11,7 @@ import AppDispatcher from './stores/AssociationListStore.js';
 var data = [];
 for (var i = 0; i < 500; i++) {
     data[i] = {
+        id: Math.random() +'_' + Date.now() + '_'+ Math.random(),
         FeatureA: 'gene ' + i,
         FeatureB: 'gene ' + i,
         logp: Math.round(Math.random() * 30 + 1),
@@ -30,6 +31,5 @@ const render = () => React.renderComponent(
     }),
     document.getElementById('content')
 );
-
 
 render();

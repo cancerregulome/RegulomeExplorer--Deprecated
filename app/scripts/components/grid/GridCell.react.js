@@ -27,6 +27,7 @@ class _GridCell {
         var content = this.props.content;
 
         return React.DOM.td({
+            key: this.props.key,
             onClick: this.__onClick,
             onMouseEnter: this.__onMouseEnter,
             onMouseLeave: this.__onMouseLeave,

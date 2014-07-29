@@ -149,12 +149,14 @@ class _GridView {
                 (idx % this.props.headerRepeat === 0)) {
 
                 rows.push(new GridHeader({
+                    key: 'header-' + idx,
                     config: visibleColumnProps,
                     extra: true
                 }));
             }
             //render row of values
             rows.push(new GridRow({
+                key: item.id,
                 item: item,
                 columns: visibleColumnConfig,
                 onClick: (e, item) => console.info(item)
@@ -166,9 +168,10 @@ class _GridView {
             className: 'table-sortable'
         }, [
             new GridHeader({
+                key: 'top-header' + Date.now(),
                 config: visibleColumnProps
             }),
-            React.DOM.tbody(null, rows)
+            React.DOM.tbody({key: 'table-body'}, rows)
         ]);
     }
 }

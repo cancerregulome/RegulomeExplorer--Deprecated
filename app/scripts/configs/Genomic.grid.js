@@ -22,11 +22,9 @@ const CONFIG = {
     }
 };
 // Genomic Grid Config
-class _GenomicGridConfig {
+export class GenomicGridConfig {
 
     getConfig() {
         return CONFIG;
     }
 }
-
-export const GenomicGridConfig = new _GenomicGridConfig();

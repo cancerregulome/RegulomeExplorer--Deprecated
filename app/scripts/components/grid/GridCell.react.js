@@ -3,6 +3,7 @@ module React from 'react';
 module _ from 'underscore';
 
 class _GridCell {
+
     getInitialState() {
         return {
             hover: false
@@ -27,7 +28,6 @@ class _GridCell {
         var content = this.props.content;
 
         return React.DOM.td({
-            key: this.props.key,
             onClick: this.__onClick,
             onMouseEnter: this.__onMouseEnter,
             onMouseLeave: this.__onMouseLeave,
@@ -35,5 +35,7 @@ class _GridCell {
 
     }
 }
+
+_GridCell.prototype.displayName = 'GridCell';
 
 export const GridCell = React.createClass(_GridCell.prototype);

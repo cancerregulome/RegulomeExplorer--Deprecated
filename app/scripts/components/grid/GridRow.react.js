@@ -19,11 +19,11 @@ class _GridRow {
         };
     }
 
-    renderCell(columnConfig, cellContent, cellId) {
+    renderCell(columnConfig, cellContent) {
         if (columnConfig.graph) {
-            return new GridCellSparkline( { key: cellId, content: cellContent, config: columnConfig }, null );
+            return new GridCellSparkline( {  key: columnConfig.id, content: cellContent, config: columnConfig }, null );
         }
-        return new GridCell( { key: cellId, content: cellContent, config: columnConfig }, null );
+        return new GridCell( { key: columnConfig.id, content: cellContent, config: columnConfig }, null );
     }
 
     __onClick(e) {
@@ -43,10 +43,10 @@ class _GridRow {
     render() {
         var item = this.props.item;
         
-        var cell = (x) => this.props.columns.filter( (c) => !c.hidden ).map( (c) => this.renderCell(c, x[c.id], c.id) );
+        var cell = (x) => this.props.columns.filter( (c) => !c.hidden ).map( (c) => this.renderCell(c, x[c.id] ) );
 
         return React.DOM.tr({
-            key: this.props.key,
+            key: this.props.config.createKey(item),
             onClick: this.__onClick,
             onMouseEnter: this.__onMouseEnter,
             onMouseLeave: this.__onMouseLeave
@@ -54,5 +54,7 @@ class _GridRow {
 
     }
 }
+
+_GridRow.prototype.displayName = 'GridRow';
 
 export const GridRow = React.createClass(_GridRow.prototype);

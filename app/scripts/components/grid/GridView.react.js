@@ -45,12 +45,10 @@ class _GridView {
 
     handleFilterTextChange(column) {
         return (newValue) => {
-            var obj = this.state.columns;
-            obj[column].filterText = newValue;
+            var obj = _.extend({}, this.state.columns);
+            obj[column].filter.text = newValue;
+            this.setState({columns: obj});
 
-            // Since we have already mutated the state, just call forceUpdate().
-            // Ideally we'd copy and setState or use an immutable data structure.
-            this.forceUpdate();
         };
     }
 
@@ -89,19 +87,22 @@ class _GridView {
         var operandRegex = /^((?:(?:[<>]=?)|==))\s*([-]?\d+(?:\.\d+)?)$/;
 
         columnNames.forEach((column) => {
-            var filterText = this.state.columns[column].filterText;
+            var filterText = this.state.columns[column].filter.text || '';
+            var dataType = this.state.columns[column].type || String;
             filters[column] = null;
 
-            if (filterText.length > 0) {
+            if (dataType === Number && filterText.length > 0) {
                 var operandMatch = operandRegex.exec(filterText);
-                if (operandMatch && operandMatch.length === 3) {
+                if (operandMatch && operandMatch.length === 3 && operandMatch[2].length > 0) {
                     //filters[column] = Function.apply(null, ['x', 'return x ' + operandMatch[1] + ' ' + operandMatch[2]]);
                     filters[column] = (function(match) {
                         return (x) => operators[match[1]](x, match[2]);
                     })(operandMatch);
                 } else {
-                    filters[column] = (x) => (x !== null ? x.toString().toLowerCase().indexOf(filterText.toLowerCase()) > -1 : false);
+                    filters[column] = (x) => true;
                 }
+            } else {
+                filters[column] = (x) => (x !== null ? x.toString().toLowerCase().indexOf(filterText.toLowerCase()) > -1 : false);
             }
         }, this);
 
@@ -117,7 +118,7 @@ class _GridView {
 
         var filterLink = (column) => {
             return {
-                value: this.state.columns[column].filterText,
+                value: this.state.columns[column].filter.text,
                 requestChange: this.handleFilterTextChange(column).bind(this)
             };
         };
@@ -132,14 +133,11 @@ class _GridView {
             };
         });
 
-
         var visibleColumnProps = columnConfig.filter( (c) => !this.state.columns[c.id].hidden );
 
-        var visibleColumnNames = visibleColumnProps.map((c) => c.id);
+        var visibleColumnKeys = visibleColumnProps.map((c) => c.id );
 
-        var visibleColumnConfig = visibleColumnNames.map( (c) => {
-            return _.extend( {id: c}, this.state.columns[c] );
-            });
+        var visibleColumnConfig = visibleColumnKeys.map( (c) => _.extend({id: c}, this.state.columns[c]) );
 
         sortedItems.forEach((item, idx) => {
             //render repeat header at requested interval
@@ -149,16 +147,16 @@ class _GridView {
                 (idx % this.props.headerRepeat === 0)) {
 
                 rows.push(new GridHeader({
-                    key: 'header-' + idx,
+                    key:'repeat-header-' + idx,
                     config: visibleColumnProps,
                     extra: true
                 }));
             }
             //render row of values
             rows.push(new GridRow({
-                key: item.id,
                 item: item,
                 columns: visibleColumnConfig,
+                config: this.props.config.rows,
                 onClick: (e, item) => console.info(item)
             }));
         });
@@ -168,7 +166,6 @@ class _GridView {
             className: 'table-sortable'
         }, [
             new GridHeader({
-                key: 'top-header' + Date.now(),
                 config: visibleColumnProps
             }),
             React.DOM.tbody({key: 'table-body'}, rows)
@@ -176,6 +173,6 @@ class _GridView {
     }
 }
 
+_GridView.prototype.displayName = 'GridView';
 
-export
-const GridView = React.createClass(_GridView.prototype);
+export const GridView = React.createClass(_GridView.prototype);

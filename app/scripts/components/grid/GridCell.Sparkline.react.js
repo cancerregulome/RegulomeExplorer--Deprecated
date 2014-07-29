@@ -49,7 +49,7 @@ class _GridCellSparkline {
     }
 
     render() {
-        return React.DOM.td( null, React.DOM.canvas({height:20, width: 200}, null) );
+        return React.DOM.td( { key: this.props.key }, React.DOM.canvas({height:20, width: 200}, null) );
     }
 }
 

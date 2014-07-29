@@ -6,6 +6,8 @@ from './components/grid/GridView.react.js';
 
 import {AssociationGridConfig} from './configs/Association.grid.js';
 
+import AppDispatcher from './stores/AssociationListStore.js';
+
 var data = [];
 for (var i = 0; i < 500; i++) {
     data[i] = {
@@ -18,10 +20,12 @@ for (var i = 0; i < 500; i++) {
     };
 }
 
+var associationGridConfig = new AssociationGridConfig();
+
 const render = () => React.renderComponent(
     new GridView({
         initialItems: data,
-        config: AssociationGridConfig.getConfig(),
+        config: associationGridConfig.getConfig(),
         headerRepeat: 30
     }),
     document.getElementById('content')

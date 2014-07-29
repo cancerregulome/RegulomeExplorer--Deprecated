@@ -40,11 +40,9 @@ const CONFIG = {
     }
 };
 // Genomic Grid Config
-class _AssociationGridConfig {
+export class AssociationGridConfig {
 
     getConfig() {
         return CONFIG;
     }
 }
-
-export const AssociationGridConfig = new _AssociationGridConfig();

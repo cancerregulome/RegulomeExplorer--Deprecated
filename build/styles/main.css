@@ -1,0 +1,89 @@
+body {
+    background: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.428571429;
+}
+
+
+/* Table Sorter */
+.table-sortable {
+  background-color: #fff;
+  margin: 10px 0 15px;
+  text-align: left;
+  border-spacing: 0;
+  border: #ddd 1px solid;
+  border-width: 1px 0 0 1px;
+  font: 12px/18px Arial, Sans-serif;
+  border-collapse: separate;
+}
+
+.table-sortable th,
+.table-sortable td {
+  border: #ddd 1px solid;
+  border-width: 0 1px 1px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* header */
+.table-sortable th,
+.table-sortable thead td {
+  font: 12px/18px Arial, Sans-serif;
+  color: #555;
+  background-color: #f5f5f5;
+  padding: 1px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  font-weight: bold;
+  overflow: hidden;
+  white-space: normal;
+}
+
+.table-sortable tbody td,
+.table-sortable tfoot th,
+.table-sortable tfoot td {
+  padding: 0px 4px;
+  vertical-align: top;
+}
+
+.table-sortable .header,
+.table-sortable .header-extra,
+.table-sortable .table-sortable-header {
+  padding: 4px 4px;
+  white-space: normal;
+  cursor: pointer;
+  border-bottom: 2px solid #ccc;
+  border-top: 2px solid transparent;
+  background: #f5f5f5 url(../images/sort.gif) no-repeat right 5px center;
+}
+
+.table-sortable .header-extra {
+  padding: 2px 4px;
+  border-bottom: 1px solid #ddd;
+  background-image: none;
+}
+
+.table-sortable th.headerSortAsc,
+.table-sortable th.table-sortable-headerSortAsc {
+  color: #333;
+  background: #f5f5f5 url(../images/asc.gif) no-repeat right 5px center;
+}
+
+.table-sortable th.headerSortDesc,
+.table-sortable th.table-sortable-headerSortDesc {
+  color: #333;
+  background: #f5f5f5 url(../images/desc.gif) no-repeat right 5px center;
+}
+
+.table-sortable td {
+  color: #333;
+}
+
+.table-sortable tbody > tr:hover > td {
+  color: #000;
+  background: #DDEAF9;
+  font-weight: bold;
+}
+/* End Table Sorter */
+

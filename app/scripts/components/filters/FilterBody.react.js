@@ -20,7 +20,7 @@ class _FilterBody {
                         'focus': this.props.isFocus
                     })
         }, [
-            this.props.config.ui.map( (widgetDefinition) => buildWidget(widgetDefinition) )
+            this.props.config.ui.map( (widgetDefinition) => this.buildWidget(widgetDefinition) )
            ]
         );
     }

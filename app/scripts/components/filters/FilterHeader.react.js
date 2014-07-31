@@ -13,7 +13,8 @@ class _FilterHeader {
             className: addons.classSet({
                         'header': true,
                         'focus': this.props.isFocus
-          null);
+          })
+        }, null);
     }
 }
 

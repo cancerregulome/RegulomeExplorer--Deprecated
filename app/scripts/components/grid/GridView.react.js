@@ -1,5 +1,4 @@
 module React from 'react';
-
 module _ from 'underscore';
 
 import {
@@ -47,8 +46,9 @@ class _GridView {
         return (newValue) => {
             var obj = _.extend({}, this.state.columns);
             obj[column].filter.text = newValue;
-            this.setState({columns: obj});
-
+            this.setState({
+                columns: obj
+            });
         };
     }
 

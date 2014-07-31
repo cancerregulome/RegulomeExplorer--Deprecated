@@ -22,7 +22,7 @@ var dist = './build';
 
 var vendorPaths = ['node_modules/underscore/underscore.js', 'node_modules/react/react.js', 'node_modules/react/addons.js', 'node_modules/es6ify/node_modules/traceur/bin/traceur-runtime.js'];
 var vendorBuild = dist + '/vendor';
-var requireFiles = ['react', 'underscore'];
+var requireFiles = ['react', 'underscore', 'addons'];
 
 var bundlePaths = {
     src: 'app.js',

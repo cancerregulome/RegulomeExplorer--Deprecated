@@ -11,7 +11,7 @@ export class AssociationListActions {
       actionType: AssociationListConstants.AL_INSERT_ASSOC,
       obj: assoc
     });
-  },
+  }
 
   /**
    * @param  {string} id The ID of the Association List item
@@ -22,7 +22,7 @@ export class AssociationListActions {
       actionType: AssociationListConstants.AL_REMOVE_ASSOC,
       id: id
     });
-  },
+  }
 
    /**
    * Clear Association List
@@ -32,7 +32,7 @@ export class AssociationListActions {
         AppDispatcher.handleViewAction({
         actionType: AssociationListConstants.AL_REMOVE_ALL,
       });
-  },
+  }
 
   /**
    * 
@@ -45,7 +45,7 @@ export class AssociationListActions {
       id: id,
       obj: assoc
     });
-  },
+  }
 
   /**
    * Copy object proeperties into all Associations

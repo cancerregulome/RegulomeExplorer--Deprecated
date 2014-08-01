@@ -3,6 +3,7 @@
   "version": "0.4.1",
   "dependencies": {
     "react": "^0.11.0",
+    "react-tools": "^0.11.1",
     "underscore": "^1.6.0"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "pretty-hrtime": "^0.2.1",
     "proxy-middleware": "^0.5.0",
     "reactify": "^0.13.1",
-    "traceur": "0.0.52",
+    "traceur": "0.0.42",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2"
   },
@@ -38,9 +39,12 @@
     "test": "jest"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/preprocessor.js",
+    "testFileExtensions": [ "js" ],
+    "scriptPreprocessor": "./preprocessor.js",
+    "setupTestFrameworkScriptFile" : "./setupTestFramework.js",
     "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
+      "./node_modules/react",
+      "./node_modules/traceur"
     ]
   }
 }

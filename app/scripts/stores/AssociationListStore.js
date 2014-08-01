@@ -10,7 +10,7 @@ module merge from 'react/lib/merge';
 
 //FIXME: Cannot get browserify to transpile import of events or EventEmitter
 // import {EventEmitter} from 'events'.EventEmitter;
-var EventEmitter = require("events").EventEmitter;
+var EventEmitter = require('events').EventEmitter;
 
 var CHANGE_EVENT = 'change';
 

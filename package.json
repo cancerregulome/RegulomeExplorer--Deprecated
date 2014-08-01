@@ -2,7 +2,8 @@
   "name": "RE",
   "version": "0.4.1",
   "dependencies": {
-    "react": "^0.11.0",    
+    "react": "^0.11.0",
+    "react-tools": "^0.11.1",
     "underscore": "^1.6.0"
   },
   "devDependencies": {
@@ -22,14 +23,28 @@
     "gulp-open": "^0.2.8",
     "gulp-rename": "^1.2.0",
     "gulp-util": "^2.2.20",
+    "jest-cli": "^0.1.17",
     "jshint-stylish": "^0.4.0",
     "pretty-hrtime": "^0.2.1",
     "proxy-middleware": "^0.5.0",
     "reactify": "^0.13.1",
+    "traceur": "0.0.42",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2"
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "testFileExtensions": [ "js" ],
+    "scriptPreprocessor": "./preprocessor.js",
+    "setupTestFrameworkScriptFile" : "./setupTestFramework.js",
+    "unmockedModulePathPatterns": [
+      "./node_modules/react",
+      "./node_modules/traceur"
+    ]
   }
 }

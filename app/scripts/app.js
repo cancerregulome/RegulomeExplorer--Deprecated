@@ -1,8 +1,10 @@
-module React from 'react';
+module React from 'react/addons';
 import {
     GridView
 }
 from './components/grid/GridView.react.js';
+
+import { TCGAFilterPanel } from './components/TCGAFilterPanel.react.js';
 
 import {AssociationGridConfig} from './configs/Association.grid.js';
 
@@ -23,7 +25,7 @@ for (var i = 0; i < 500; i++) {
 
 var associationGridConfig = new AssociationGridConfig();
 
-const render = () => React.renderComponent(
+const renderGrid = () => React.renderComponent(
     new GridView({
         initialItems: data,
         config: associationGridConfig.getConfig(),
@@ -32,4 +34,13 @@ const render = () => React.renderComponent(
     document.getElementById('content')
 );
 
-render();
+const renderFilters = () => React.renderComponent(
+    new TCGAFilterPanel({
+    }),
+    document.getElementById('filters')
+);
+
+(function() {
+    renderGrid();
+    renderFilters();
+})();

@@ -1,31 +1,28 @@
-module React from 'react';
-module addons from 'addons';
-module _ from 'underscore';
+module React from 'react/addons';
 
-import {FilterWidgets} from './FilterWidgets.react.js';
+import {FilterWidget} from './FilterWidget.react.js';
 
 class _FilterBody {
     getInitialState() {
-
+        return {};
     }
 
     buildWidget(widgetDefinition){
-        return React.DOM.div(null,null);
+        return new FilterWidget(widgetDefinition);
     }
 
     render() {
         return React.DOM.div({
-            className: addons.classSet({
+            className: React.addons.classSet({
                         'filter-body': true,
                         'focus': this.props.isFocus
                     })
         }, [
-            this.props.config.ui.map( (widgetDefinition) => this.buildWidget(widgetDefinition) )
+            this.props.config.widgets.map( (widgetDefinition) => this.buildWidget(widgetDefinition) )
            ]
         );
     }
 }
-
 
 _FilterBody.prototype.displayName = 'FilterBody';
 

@@ -1,23 +1,28 @@
-module React from 'react';
-module addons from 'addons';
-module _ from 'underscore';
+module React from 'react/addons';
 
+import {FilterButtonPanel} from './FilterButtonPanel.react.js';
 
 class _FilterHeader {
     getInitialState() {
+        return {};
+    }
 
+    getHeaderElement(){
+        return React.DOM.span({className:'title'}, this.props.label );
     }
 
     render() {
         return React.DOM.div({
-            className: addons.classSet({
-                        'header': true,
-                        'focus': this.props.isFocus
+            className: React.addons.classSet({
+                        'header': true
           })
-        }, null);
+        }, [
+            this.getHeaderElement(),
+            new FilterButtonPanel({config: this.props.config})
+            ]
+        );
     }
 }
-
 
 _FilterHeader.prototype.displayName = 'FilterHeader';
 

@@ -1,29 +1,38 @@
-module React from 'react';
-module addons from 'addons';
-module _ from 'underscore';
+module React from 'react/addons';
 
 import {FilterHeader} from './FilterHeader.react.js';
 import {FilterBody} from './FilterBody.react.js';
 
 class _FilterView {
     getInitialState() {
+        return {
+            'collapsed' : false
+        };
+    }
 
+    onCollapseClick(e) {
+        this.setState({collapsed: !this.state.collapsed});
+    }
+
+    onDestroyClick(e) {
+        this.setState({collapsed: !this.state.collapsed});
     }
 
     render() {
         return React.DOM.div({
-            className: addons.classSet({
+            className: React.addons.classSet({
                         'filter-module': true,
                         'focus': this.props.isFocus
                     })
         }, [
             new FilterHeader({
-                config: this.props.config
+                'config': this.props.config,
+                'onCollapseClick' : this.onCollapseClick.bind(this),
+                'onDestroyClick' : this.onDestroyClick.bind(this)
             }),
-            new FilterBody({
-                config: this.props.config
-            })
-        ]);
+            this.state.collapsed ? null : new FilterBody({ 'config': this.props.config })
+            ]
+        );
     }
 }
 

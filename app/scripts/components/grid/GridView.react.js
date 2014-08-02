@@ -1,4 +1,4 @@
-module React from 'react';
+module React from 'react/addons';
 module _ from 'underscore';
 
 import {

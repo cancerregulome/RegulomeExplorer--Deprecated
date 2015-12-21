@@ -9,6 +9,7 @@ The previous version of RE is deployed at [explorer.cancerregulome.org/all_pairs
 
 This is a new implementation of RE that does not share codebase with the previous version.  If you are looking for the source code for the previous version of RE, go to [www.googlecode.com/p/regulome-explorer/](www.googlecode.com/p/regulome-explorer/)
 
+This new version was never completed and has been deprecated.  The current version is copied from its location on [www.googlecode.com/p/regulome-explorer/](www.googlecode.com/p/regulome-explorer/) to [cancerregulome/RegulomeExplorer](https://github.com/cancerregulome/RegulomeExplorer)
 
 Build Instructions
 ==================
